@@ -1,0 +1,226 @@
+﻿@model BloodHeroA.DTOs.DonorResponseDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Viewing Recipient Organization </title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #b71c1c;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #fdecea;
+            color: #b71c1c;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #b71c1c;
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+            .detail-row strong {
+                color: #333;
+            }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 14px;
+            background-color: #b71c1c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background-color: #7f0000;
+            }
+
+
+        @@media (max-width: 600px) {
+            .card {
+                padding: 15px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .detail-row {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>@(Model?.FirstName ?? "No") Details</h1>
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert-success">
+                @ViewBag.Success
+            </div>
+        }
+
+        @if (Model != null)
+        {
+            <div class="card">
+                <div class="card-title">@Model.FirstName @Model.MiddleName @Model.LastName</div>
+
+                <div class="detail-row">
+                    Total Donations Made: <strong>@Model.TotalDonations</strong>
+                </div>
+
+
+                <div class="detail-row">
+                    Donor Id: <strong>@Model.Id</strong>
+                </div>
+
+                <div class="detail-row">
+                    Email: <strong>@Model.Email</strong>
+                </div>
+
+                <div class="detail-row">
+                    Phone Number: <strong>@Model.PhoneNumber</strong>
+                </div>
+
+                <div class="detail-row">
+                    BloodGroup: <strong>@Model.BloodGroup</strong>
+                </div>
+
+                <div class="detail-row">
+                    Gender: <strong>@Model.Gender</strong>
+                </div>
+
+                <div class="detail-row">
+                    Date Of Birth: <strong>@Model.DateOfBirth</strong>
+                </div>
+
+                <div class="detail-row">
+                    Marital Status: <strong>@Model.MaritalStatus</strong>
+                </div>
+
+                <div class="detail-row">
+                    State Of Origin: <strong>@Model.StateOfOrigin</strong>
+                </div>
+
+                <div class="detail-row">
+                    Donor Organization Name: <strong>@Model.DonorOrganizationName</strong>
+                </div>
+                
+                <div class="detail-row">
+                    Has Hepatitis B?: <strong>@Model.HepatitisB</strong>
+                </div>
+
+                <div class="detail-row">
+                    Has Syphilis?: <strong>@Model.Syphilis</strong>
+                </div>
+
+                <div class="detail-row">
+                    Has Tattoo: <strong>@Model.Tattoo</strong>
+                </div>
+
+                <div class="detail-row">
+                    Is Cancerous: <strong>@Model.Cancer</strong>
+                </div>
+
+                <div class="detail-row">
+                   Has Chronic Disease?: <strong>@Model.ChronicDisease</strong>
+                </div>
+
+                <div class="detail-row">
+                    Has Heart Disease?: <strong>@Model.HeartDisease</strong>
+                </div>
+
+                <div class="detail-row">
+                    Is Hemophilic: <strong>@Model.Hemophilic</strong>
+                </div>
+
+                <div class="detail-row">
+                    Has Hepatitis B?: <strong>@Model.HepatitisB</strong>
+                </div>
+
+                <div class="detail-row">
+                    Has HIV?: <strong>@Model.HIV</strong>
+                </div>
+
+                <div class="detail-row">
+                    Takes IV Drugs?: <strong>@Model.IVDrugConsumer</strong>
+                </div>
+
+                <div class="detail-row">
+                    Is Severe Lungs Disease Patient?: <strong>@Model.SevereLungsDisease</strong>
+                </div>
+
+
+                <div class="detail-row">
+                    Registered Date:
+                    <strong>@Model.RegisterdDate.ToString("dd MMM yyyy HH:mm")</strong>
+                </div>
+
+                <a asp-action="@ViewBag.Source" class="btn-back">
+                    ← Back to List
+                </a>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want toolbar delete this donor organization?');">
+                        Delete
+                    </button>
+                </form>
+                
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>
+
+
+                   
+                    
+                    

@@ -1,0 +1,108 @@
+﻿@model IEnumerable<BloodHeroA.DTOs.DonationRequestResponseDto>
+
+@{
+    ViewData["Title"] = "Donation Requests by Status";
+    Layout = null;
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #fff0f0;
+    }
+
+    .topbar {
+        background: linear-gradient(90deg, #8B0000, #B22222);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .table thead {
+        background-color: #B22222;
+        color: white;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #ffe5e5;
+    }
+
+    .table tbody tr:hover {
+        background-color: #ffcccc;
+    }
+
+    #details {
+        background-color: #B22222;
+        color: white;
+        text-decoration: none;
+    }
+
+    .error-msg {
+        background-color: #ffcccc;
+        color: #8B0000;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    @@media (max-width: 768px) {
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="topbar">Donation Requests by Status</div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="error-msg">@ViewBag.Error</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Request Blood Type</th>
+                    <th>Units Requested</th>
+                    <th>Status</th>
+                    <th>Request Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var request in Model)
+                    {
+                        <tr>
+                            <td>@request.Id</td>
+                            <td>@request.BloodType</td>
+                            <td>@request.UnitsRequested</td>
+                            <td>@request.Status</td>
+                            <td>@request.RequestDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <a asp-action="GetById" asp-route-Id="@request.Id" id="details">View Details</a>
+                            </td>
+                            <td>
+                                <button onclick="history.back()" id="details">Back To Dashboard</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No requests found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

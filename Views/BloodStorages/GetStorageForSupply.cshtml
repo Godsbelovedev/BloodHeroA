@@ -1,0 +1,206 @@
+﻿@model IEnumerable<BloodHeroA.DTOs.BloodStorageResponseDto>
+>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blood Storage</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background-color: #c0392b;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f9d6d5;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .btn-view {
+            background-color: #b71c1c;
+            color: white;
+        }
+
+            .btn-view:hover {
+                background-color: #7f0000;
+            }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+            .btn-delete:hover {
+                background-color: #c0392b;
+            }
+
+
+        @@media (max-width: 768px) {
+            table {
+                min-width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            table, tbody, tr, td {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                background: white;
+                border-radius: 6px;
+                padding: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            }
+
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+                td::before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 10px;
+                    width: 45%;
+                    text-align: left;
+                    font-weight: bold;
+                    color: #c0392b;
+                }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Blood Storage</h2>
+
+        @if (Model == null || !Model.Any())
+        {
+            <p style="text-align:center;color:red;">@ViewBag.Error.</p>
+        }
+        else
+        {
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>BloodGroup</th>
+                            <th>Location</th>
+                            <th>Date Stored</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @foreach (var storage in Model)
+                        {
+                            <tr>
+                                <td data-label="Id">@storage.Id</td>
+                                <td data-label="Name">@storage.BloodGroup</td>
+                                <td data-label="Name">@storage.Location</td>
+                                <td data-label="Date Stored">
+                                    @storage.DateStored.ToString("dd MMM yyyy HH:mm")
+                                </td>
+
+
+                                <td data-label="Actions">
+                                    <a asp-action="GetStorageById"
+                                       asp-route-id="@storage.Id"
+                                       class="btn btn-view">
+                                        View Details
+                                    </a>
+
+                                    <a asp-controller="BloodReleased"
+                                       asp-action="Create"
+                                       asp-route-storageId="@storage.Id"
+                                       asp-route-requestId="@ViewBag.RequestId"
+                                       class="btn btn-view">
+                                        Issue Blood
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+               
+            </div>
+        }
+        <a asp-controller="BankingOrganizationDashboard"
+           asp-action="Dashboard"
+           class="btn btn-view">
+            Back To DashBoard
+        </a>
+    </div>
+
+</body>
+</html>

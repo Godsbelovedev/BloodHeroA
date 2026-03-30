@@ -1,0 +1,157 @@
+﻿@model BloodHeroA.DTOs.DonationResponseDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Viewing Donation</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #b71c1c;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #fdecea;
+            color: #b71c1c;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #b71c1c;
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+            .detail-row strong {
+                color: #333;
+            }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 14px;
+            background-color: #b71c1c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background-color: #7f0000;
+            }
+
+
+        @@media (max-width: 600px) {
+            .card {
+                padding: 15px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .detail-row {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>A Donation From@(Model?.DonorName) Details</h1>
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert-success">
+                @ViewBag.Success
+            </div>
+        }
+
+        @if (Model != null)
+        {
+            <div class="card">
+                <div class="card-title">Donation From @Model.DonorName</div>
+
+                <div class="detail-row">
+                    Donation Id: <strong>@Model.Id</strong>
+                </div>
+
+                <div class="detail-row">
+                    Donated To: <strong>@Model.BankingOrganizationName</strong>
+                </div>
+
+                <div class="detail-row">
+                    Unit at once: <strong>@Model.UnitsDonated</strong>
+                </div>
+
+                <div class="detail-row">
+                    Blood Group: <strong>@Model.BloodGroup</strong>
+                </div>
+
+                <div class="detail-row">
+                    Donation Date:
+                    <strong>@Model.DonationDate.ToString("dd MMM yyyy HH:mm")</strong>
+                </div>
+
+                <div class="detail-row">
+                    Donor Oganization:
+                    <strong>@Model.DonorOrganizationName</strong>
+                </div>
+
+                <a asp-action="@(ViewBag.Source ?? "GetAllUntestedDonations")"
+                   asp-controller ="Donations"
+                class="btn-back">
+                    ← Back to List
+                </a>
+                @* <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure you want toolbar delete this blood bank?');">
+                        Delete
+                    </button>
+                </form> *@
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>

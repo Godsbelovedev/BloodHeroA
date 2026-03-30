@@ -1,0 +1,135 @@
+﻿@model BloodHeroA.DTOs.NotificationDTO
+
+@{
+    ViewData["Title"] = "Send Notification";
+    Layout = null; 
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #ffe5e5, #fff5f5);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .notification-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .notification-card {
+        width: 100%;
+        max-width: 600px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(139, 0, 0, 0.15);
+        padding: 35px;
+        border-top: 8px solid #8B0000;
+    }
+
+    .notification-title {
+        text-align: center;
+        color: #8B0000;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #8B0000;
+    }
+
+    .form-control:focus {
+        border-color: #B22222;
+        box-shadow: 0 0 0 0.2rem rgba(178, 34, 34, 0.25);
+    }
+
+    .btn-blood {
+        background-color: #8B0000;
+        color: white;
+        font-weight: 600;
+        padding: 10px;
+        border-radius: 8px;
+        transition: 0.3s ease;
+    }
+
+        .btn-blood:hover {
+            background-color: #B22222;
+            color: white;
+        }
+
+    .alert-danger {
+        background-color: #ffcccc;
+        color: #8B0000;
+        border: none;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    @@media (max-width: 576px) {
+        .notification-card
+
+    {
+        padding: 25px;
+    }
+
+    }
+</style>
+
+<div class="notification-wrapper">
+    <div class="notification-card">
+
+        <h3 class="notification-title">Send Notification</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-action="SendNotification" method="post">
+
+            <div class="mb-3">
+                <label asp-for="ReceiverEmail" class="form-label"></label>
+                <input asp-for="ReceiverEmail" type="email" class="form-control"
+                       placeholder="Enter recipient email" />
+                <span asp-validation-for="ReceiverEmail" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Subject" class="form-label"></label>
+                <input asp-for="Subject" class="form-control"
+                       placeholder="Enter subject" />
+                <span asp-validation-for="Subject" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Message" class="form-label"></label>
+                <textarea asp-for="Message" rows="5"
+                          class="form-control"
+                          placeholder="Type your message here..."></textarea>
+                <span asp-validation-for="Message" class="text-danger small"></span>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-blood">
+                    Send Notification
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,158 @@
+﻿@model BloodHeroA.DTOs.DonorOrganizationResponseDto
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile View</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #b71c1c;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #fdecea;
+            color: #b71c1c;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #b71c1c;
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+            .detail-row strong {
+                color: #333;
+            }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 14px;
+            background-color: #b71c1c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background-color: #7f0000;
+            }
+
+
+        @@media (max-width: 600px) {
+            .card {
+                padding: 15px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .detail-row {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>@(Model?.OrganizationName ?? "No") Details</h1>
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert-success">
+                @ViewBag.Success
+            </div>
+        }
+
+        @if (Model != null)
+        {
+            <div class="card">
+                <div class="card-title">@Model.OrganizationName</div>
+
+                <div class="detail-row">
+                    Organization Id: <strong>@Model.Id</strong>
+                </div>
+
+                <div class="detail-row">
+                    Email: <strong>@Model.Email</strong>
+                </div>
+
+                <div class="detail-row">
+                    Phone Number: <strong>@Model.PhoneNumber</strong>
+                </div>
+
+                <div class="detail-row">
+                    Address: <strong>@Model.Address</strong>
+                </div>
+
+                <div class="detail-row">
+                    Registered Date:
+                    <strong>@Model.CreatedAt.ToString("dd MMM yyyy HH:mm")</strong>
+                </div>
+
+                <div class="detail-row">
+                    Total Registered Donors:
+                    <strong>@Model.TotalRegisteredDonors</strong>
+                </div>
+
+                <div class="detail-row">
+                    Total Donations:
+                    <strong>@Model.TotalDonations</strong>
+                </div>
+                
+                <a asp-controller="DonorOrganizationDashboard" asp-action="Dashboard" class="btn-back">
+                    ← Back to Dashboard
+                </a>
+                <a asp-action="UpdateProfile" class="btn-back">
+                    Edit Profile →
+                </a>
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>

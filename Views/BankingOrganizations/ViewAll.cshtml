@@ -1,0 +1,207 @@
+﻿@model IEnumerable<BloodHeroA.DTOs.BankingOrganizationResponseDto>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registered Blood Banks</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background-color: #c0392b;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f9d6d5;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .btn-view {
+            background-color: #b71c1c; 
+            color: white;
+        }
+
+            .btn-view:hover {
+                background-color: #7f0000; 
+            }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            margin-top: 20px;
+        }
+
+            .btn-delete:hover {
+                background-color: #c0392b;
+            }
+
+       
+        @@media (max-width: 768px) {
+            table
+
+        {
+            min-width: 100%;
+        }
+
+        thead {
+            display: none;
+        }
+
+        table, tbody, tr, td {
+            display: block;
+            width: 100%;
+        }
+
+        tr {
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+        }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 45%;
+                text-align: left;
+                font-weight: bold;
+                color: #c0392b;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Registered Blood Banks</h2>
+
+        @if (Model == null || !Model.Any())
+        {
+            <p style="text-align:center;color:red;">No blood bank registered yet.</p>
+        }
+        else
+        {
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Id</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Date Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var org in Model)
+                        {
+                            <tr>
+                                <td data-label="Name">@org.OrganizationName</td>
+                                <td data-label="Id">@org.Id</td>
+                                <td data-label="Email">@org.Email</td>
+                                <td data-label="Phone">@org.PhoneNumber</td>
+                                <td data-label="Address">@org.Address</td>
+                                <td data-label="Date">
+                                    @org.CreatedAt.ToString("dd MMM yyyy HH:mm")
+                                </td>
+                                <td data-label="Actions">
+                                    <a asp-action="GetById"
+                                       asp-route-id="@org.Id"
+                                       class="btn btn-view">
+                                        View Details
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@org.Id"
+                                          method="post"
+                                          style="display:inline;">
+                                        <button type="submit"
+                                                class="btn btn-delete"
+                                                onclick="return confirm('Delete this blood bank?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>

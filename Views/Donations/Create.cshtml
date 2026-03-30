@@ -1,0 +1,199 @@
+﻿@model BloodHeroA.DTOs.DonationDTO
+
+@{
+    ViewData["Title"] = "Create new Donation";
+    Layout = null;
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffe5e5; 
+    }
+
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 60px;
+    }
+
+    .card {
+        width: 420px;
+        background-color: #fff0f0; 
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(179, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-color: #b30000; 
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #660000; 
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #b30000;
+        font-size: 14px;
+        background-color: #fff5f5; 
+        color: #330000;
+    }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #800000;
+            box-shadow: 0 0 5px rgba(179,0,0,0.5);
+        }
+
+    .form-check-label {
+        color: #660000;
+        font-weight: 500;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #b30000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn:hover {
+            background-color: #800000;
+        }
+
+    .alert-danger {
+        background-color: #f8d7da; 
+        color: #842029; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #f5c2c7;
+    }
+
+    .alert-success {
+        background-color: #ffd6d6; 
+        color: #b30000;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #f5a3a3;
+    }
+
+    .validation-error {
+        color: #b30000;
+        font-size: 13px;
+    }
+</style>
+
+<div class="container">
+    <div class="card">
+       
+        <div class="card-header">
+            🩸 Making New Donation
+        </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert-success">
+                    @ViewBag.Success
+                </div>
+            }
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="DonorId" />
+                <input type="hidden" asp-for="DonorOrganizationId"/>
+                <input type="hidden" name="source" value="@ViewBag.Source" />
+
+                <div class="form-group">
+                    <label asp-for="DonationRemark"></label>
+                    <textarea asp-for="DonationRemark" rows="3"
+                              placeholder="Enter donation remarks"></textarea>
+                    <span asp-validation-for="DonationRemark" class="validation-error"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <label asp-for="IsSuccessful" class="form-check-label" for="IsSuccessful">
+                        Donation Completed?
+                    </label>
+                    <input asp-for="IsSuccessful" class="form-check-input" id="IsSuccessful" />
+                </div>
+
+                <button type="submit" class="btn">
+                    Submit Donation
+                </button>
+            </form>
+            @if (Model.DonorOrganizationId != null)
+            {
+                <a asp-controller="Donors"
+                   asp-route-action="GetAvailableDonorsByDonorOrganizationId"
+                   asp-route-donorOrganizationId="@Model.DonorOrganizationId"
+                   style=" width: 80%;
+                    text-decoration: none;
+                    padding: 12px;
+                    background-color: #b30000;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 15px;
+                    cursor: pointer;
+                    transition: 0.3s;">
+                    Back
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Donors"
+                  asp-action="GetAvailableDonors"
+                   style=" width: 80%;
+                        text-decoration: none;
+                        padding: 12px;
+                        background-color: #b30000;
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 15px;
+                        cursor: pointer;
+                        transition: 0.3s;">
+                    Back
+                </a>
+            }
+        </div>
+    </div>
+</div>

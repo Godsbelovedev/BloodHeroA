@@ -1,0 +1,614 @@
+﻿@using BloodHeroA.Models.Enums
+@{
+    ViewData["Title"] = "Banking Organization Dashboard";
+    Layout = null;
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f9fafb;
+    }
+
+    .topbar {
+        height: 60px;
+        background: linear-gradient(90deg, #8B0000, #B22222);
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+        .topbar h3 {
+            margin-left: 20rem;
+            padding-right: 5rem;
+        }
+
+    .menu-btn {
+        font-size: 26px;
+        cursor: pointer;
+        margin-right: 20px;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        background: #7f1d1d;
+        color: white;
+        transition: 0.3s ease;
+        padding: 70px 15px 20px 15px;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+    }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+
+    .dropdown-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        color: #f8fafc;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 15px 20px;
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
+
+
+
+        .dropdown-btn:hover {
+            background: #991b1b;
+        }
+
+        .dropdown-btn.active {
+            background: #991b1b;
+        }
+
+        .dropdown-btn::after {
+            content: "▶";
+            float: right;
+            transition: transform 0.3s;
+        }
+
+        .dropdown-btn.active::after {
+            content: "▼";
+            transform: rotate(180deg);
+        }
+
+    .dropdown-container {
+        display: none;
+        padding-left: 20px;
+        background: #991b1b;
+    }
+
+        .dropdown-container a {
+            display: block;
+            padding: 12px 20px;
+            color: #f8fafc;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+            .dropdown-container a:hover {
+                background: #b91c1c;
+                padding-left: 28px;
+            }
+
+    #logout {
+        background: #B22222;
+        color: #fff;
+        text-decoration: none;
+        height: 45px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        #logout:hover {
+            background-color: #8B0000;
+        }
+
+    .bell-icon {
+        position: relative;
+        font-size: 22px;
+        text-decoration: none;
+        color: #333;
+        display: inline-block;
+        margin-left: 8rem;
+    }
+
+        .bell-icon:hover {
+            text-decoration: none;
+        }
+
+    .badge {
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        background-color: #fff;
+        color: #B22222;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 50%;
+        min-width: 18px;
+        text-align: center;
+    }
+
+    .content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        color: red;
+        padding: 30px;
+        transition: 0.3s ease;
+        gap: 2rem;
+        max-width: 1200px;
+    }
+
+        .content.shift {
+            margin-left: 250px;
+        }
+
+    .chart-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+       
+    }
+
+    .chart-container canvas {
+            width: 100% !important;
+            height: auto !important;
+            display: block;
+    }
+</style>
+
+<div class="topbar">
+    <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+
+    <h3>BANKING ORGANIZATION DASHBOARD</h3>
+
+    <div class="bell-container">
+        <a asp-controller="Notifications"
+           asp-action="GetNotifications"
+           class="bell-icon"
+           id="bellicon"
+           aria-label="Notifications">
+            🔔
+
+            @if (ViewBag.UnreadCount != null && ViewBag.UnreadCount > 0)
+            {
+                <div class="badge" id="badge-count">
+                    @(ViewBag.UnreadCount == 99 ? "99+" : ViewBag.UnreadCount.ToString());
+                </div>
+            }
+
+        </a>
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <button class="dropdown-btn">MANAGE DONATIONS</button>
+    <div class="dropdown-container">
+        <a asp-controller="DonorOrganization" asp-action="ViewAllForDonations">Get Donations From Organization Donors</a>
+        <a asp-controller="Donors" asp-action="GetAvailableDonors" >Get Donations From Individual Donors</a>
+        <a asp-controller="Donations" asp-action="GetAllUntestedDonations">Test Donations</a>
+        <a asp-controller="Donations" asp-action="GetDonationsForStorage">Store Donations</a>
+    </div>
+
+    <button class="dropdown-btn">MANAGE STORAGE</button>
+    <div class="dropdown-container">
+        <a asp-controller="BloodStorages" asp-action="GetExpired">Delete Expired Bloods</a>
+        @* <a asp-controller="Donors" asp-action="GetAvailableDonors">Get Donations From Individual Donors</a>
+        <a asp-controller="Donations" asp-action="GetAllUntestedDonations">Test Donations</a>
+        <a asp-controller="Donations" asp-action="GetDonationsForStorage">Store Donations</a> *@
+    </div>
+
+    <button class="dropdown-btn">MANAGE REQUEST</button>
+    <div class="dropdown-container">
+        <a asp-controller="DonationRequest" asp-action="SendRequestByBankingOrganization">Make A Request</a>
+
+        <a asp-controller="DonationRequest" asp-action="GetByStatusForSupply" asp-route-status="@Status.Pending">View Pending Requests Received</a>
+        <a asp-controller="DonationRequest" asp-action="GetByStatusForSupply" asp-route-status="@Status.InProgress">View Incompleted Requests Received</a>
+        <a asp-controller="DonationRequest" asp-action="GetByStatusForSupply" asp-route-status="@Status.Completed">View Completed Requests Received</a>
+        <a asp-controller="DonationRequest" asp-action="GetBankingOrganizationSentRequestsByStatus" asp-route-status="@Status.Pending">View Pending Requests Sent</a>
+        <a asp-controller="DonationRequest" asp-action="GetBankingOrganizationSentRequestsByStatus" asp-route-status="@Status.InProgress">View Incompleted Requests Sent</a>
+        <a asp-controller="DonationRequest" asp-action="GetBankingOrganizationSentRequestsByStatus" asp-route-status="@Status.Completed">View Completed Requests Sent</a>
+    </div>
+
+    <button class="dropdown-btn">MANAGE PROFILE</button>
+    <div class="dropdown-container">
+        <a asp-controller="BankingOrganizations" asp-action="ViewProfile">View Profile</a>
+        <a asp-controller="Users" asp-action="UpdatePassword">Change Password</a>
+    </div>
+
+    <button class="dropdown-btn">MANAGE NOTIFICATION</button>
+    <div class="dropdown-container">
+        <a asp-controller="Notifications" asp-action="SendNotification">Send Notification</a>
+    </div>
+    <a asp-controller="Users" asp-action="Login" id="logout">Log Out</a>
+</div>
+
+<h2 style="text-align:center;">Statistics Overview</h2>
+<div class="content" id="content">
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood Request</h2>
+        <canvas id="pieChart" ></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood O+</h2>
+        <canvas id="pieChart1" ></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood O-</h2>
+        <canvas id="pieChart2"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood A+</h2>
+        <canvas id="pieChart3"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood A-</h2>
+        <canvas id="pieChart4"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood B+</h2>
+        <canvas id="pieChart5"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood B-</h2>
+        <canvas id="pieChart6"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood AB+</h2>
+        <canvas id="pieChart7"></canvas>
+    </div>
+    <div class="chart-container">
+        <h2>Statistical Overview on Blood AB-</h2>
+        <canvas id="pieChart8"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+     Chart.register(ChartDataLabels);
+
+    document.querySelectorAll(".dropdown-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            this.classList.toggle("active");
+            const container = this.nextElementSibling;
+            container.style.display = container.style.display === "block" ? "none" : "block";
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+        const menuBtn = document.querySelector(".menu-btn");
+
+        function toggleSidebar() {
+            sidebar.classList.toggle("active");
+            content.classList.toggle("shift");
+        }
+
+        window.toggleSidebar = toggleSidebar;
+
+        document.addEventListener("click", function (event) {
+            const clickedInsideSidebar = sidebar.contains(event.target);
+            const clickedMenuBtn = menuBtn.contains(event.target);
+
+            if (!clickedInsideSidebar && !clickedMenuBtn) {
+                sidebar.classList.remove("active");
+                content.classList.remove("shift");
+            }
+        });
+              
+       pieContent = document.getElementById('pieChart').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Pending', 'In-Progress', 'Completed'],
+               datasets:[{
+                   data: [@ViewBag.PendingCount, @ViewBag.incompletedCount, @ViewBag.completedCount],
+                   backgroundColor: ["orange","red","green"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart1').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.OpositiveReleased, @ViewBag.OpositiveStored,
+                          @ViewBag.OpositiveExpired, @ViewBag.OpositiveAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart2').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.ONegativeReleased, @ViewBag.ONegativeStored,
+                          @ViewBag.ONegativeExpired, @ViewBag.ONegativeAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart3').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.APositiveReleased, @ViewBag.APositiveStored,
+                          @ViewBag.APositiveExpired, @ViewBag.APositiveAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart4').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.ANegativeReleased, @ViewBag.ANegativeStored,
+                          @ViewBag.ANegativeExpired, @ViewBag.ANegativeAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart5').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.BPositiveReleased, @ViewBag.BPositiveStored,
+                          @ViewBag.BPositiveExpired, @ViewBag.BPositiveAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart6').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.BNegativeReleased, @ViewBag.BNegativeStored,
+                          @ViewBag.BNegativeExpired, @ViewBag.BNegativeAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart7').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.ABPositiveReleased, @ViewBag.ABPositiveStored,
+                          @ViewBag.ABPositiveExpired, @ViewBag.ABPositiveAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart8').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Released', 'Stored', 'Expired', 'Available'],
+               datasets:[{
+                   data: [@ViewBag.ABNegativeReleased, @ViewBag.ABNegativeStored,
+                          @ViewBag.ABNegativeExpired, @ViewBag.ABNegativeAvailable],
+
+                   backgroundColor: ["Red","Purple","Green", "Blue"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+
+    });
+</script>
+                     

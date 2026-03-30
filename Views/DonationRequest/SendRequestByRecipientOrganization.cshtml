@@ -1,0 +1,122 @@
+﻿@using BloodHeroA.Models.Enums
+@model BloodHeroA.DTOs.DonationRequestDto
+
+@{
+    ViewData["Title"] = "Send Blood Request";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Send Blood Request</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #7f0000, #b30000);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .request-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .request-title {
+            color: #b30000;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-blood {
+            background-color: #b30000;
+            color: white;
+            font-weight: 600;
+        }
+
+            .btn-blood:hover {
+                background-color: #8b0000;
+                color: white;
+            }
+
+        .form-control:focus {
+            border-color: #b30000;
+            box-shadow: 0 0 0 0.2rem rgba(179, 0, 0, 0.25);
+        }
+
+        .alert-custom {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="request-card">
+
+        <h3 class="request-title">Send Blood Request</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger alert-custom">
+                @ViewBag.Error
+            </div>
+        }
+
+        @if (TempData["failure"] != null)
+        {
+            <div class="alert alert-warning alert-custom">
+                @TempData["failure"]
+            </div>
+        }
+
+        <form asp-action="SendRequestByRecipientOrganization" method="post">
+
+            <div class="mb-3">
+                <label asp-for="BloodTypeNeeded" class="form-label"></label>
+                <select asp-for="BloodTypeNeeded"
+                        asp-items="Html.GetEnumSelectList<BloodGroup>()"
+                        class="form-control">
+                    <option value="">-- Select Blood Group --</option>
+                </select>
+                <span asp-validation-for="BloodTypeNeeded" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="UnitsRequested" class="form-label"></label>
+                <input asp-for="UnitsRequested" class="form-control" type="number" min="1" step="1"/>
+                <span asp-validation-for="UnitsRequested" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Note" class="form-label"></label>
+                <textarea asp-for="Note" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-blood">
+                    Send Request
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+</html>

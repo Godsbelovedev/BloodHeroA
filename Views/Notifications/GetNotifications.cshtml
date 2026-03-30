@@ -1,0 +1,212 @@
+﻿@using BloodHeroA.Models.Enums
+@model IEnumerable<BloodHeroA.DTOs.NotificationResponseDto>
+
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = null;
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #f0f4f8, #e6eef5);
+    }
+
+    .page-wrapper {
+        padding: 40px 20px;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .page-title {
+        color: #1e3a8a;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .notification-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        border-left: 5px solid red;
+        transition: 0.3s ease;
+    }
+
+        .notification-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+    .notification-subject {
+        font-weight: 600;
+        color: red;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+
+    .notification-message {
+        color: #374151;
+        margin-bottom: 10px;
+        white-space: pre-line;
+    }
+
+    .notification-date {
+        font-size: 13px;
+        color: #6b7280;
+        text-align: right;
+    }
+    .notification-card a {
+        display: inline-block;
+        text-decoration: none;
+        background-color: #B22222;
+        color: #fff;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .notification-card a:hover {
+            background-color: #8B0000; 
+            transform: translateY(-2px);
+        }
+
+        .notification-card a:active {
+            transform: translateY(0);
+            background-color: #A50000; 
+        }
+
+    .alert-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .unread-icon {
+        width: 10px;
+        height: 10px;
+        background-color: #d00000;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    #back-button{
+        background-color: #d00000;
+        color: #fff;
+        margin-right: 8rem;
+        border: none;
+        border-radius:10px;
+        width: 8rem;
+        height: 2rem;
+        text-decoration: none;
+    }
+    .empty-state {
+        text-align: center;
+        color: #6b7280;
+        padding: 40px 0;
+        font-size: 16px;
+    }
+
+    @@media (max-width: 768px) {
+        .notification-card
+
+    {
+        padding: 15px;
+    }
+
+    .notification-subject {
+        font-size: 16px;
+    }
+  }
+</style>
+
+<div class="page-wrapper">
+
+    <h2 class="page-title">Your Notifications</h2>
+
+   
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert-error">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            You have no notifications at the moment.
+        </div>
+    }
+    else
+    {
+        foreach (var notification in Model)
+        {
+            <div class="notification-card">
+                @if(notification.IsRead == false)
+                {
+                    <span class="unread-icon">🔴</span>
+                }
+                <div class="notification-subject">
+                    @notification.Subject
+                </div>
+
+                <div class="notification-sender">
+                    @notification.SenderName
+                </div>
+
+                <div class="notification-date">
+                    @notification.SentDate.ToString("dd MMM yyyy • HH:mm")
+                </div>
+                <div >
+                    <a asp-action="GetById" asp-route-Id="@notification.Id">View Details</a>
+                </div>
+            </div>
+            
+        }
+    }
+    @if (User.IsInRole(Role.Admin.ToString()))
+    {
+        <a asp-controller="AdminDashboard"
+           asp-action="Dashboard" id="back-button">
+         Back To Dashboard</a>
+    }
+    else if (User.IsInRole(Role.BankingOrganization.ToString()))
+    {
+        <a asp-controller="BankingOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.DonorOrganization.ToString()))
+    {
+        <a asp-controller="DonorDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.RecipientOrganization.ToString()))
+    {
+        <a asp-controller="RecipientOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.Donor.ToString()))
+    {
+        <a asp-controller="DonorDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+</div>

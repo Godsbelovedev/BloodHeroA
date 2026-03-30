@@ -1,0 +1,326 @@
+﻿@using BloodHeroA.Models.Enums
+@{
+    ViewData["Title"] = "Donor Organization Dashboard";
+    Layout = null;
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f9fafb;
+    }
+
+    .topbar {
+        height: 60px;
+        background: linear-gradient(90deg, #8B0000, #B22222);
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+        .topbar h3 {
+            margin-left: 20rem;
+            padding-right: 5rem;
+        }
+
+    .menu-btn {
+        font-size: 26px;
+        cursor: pointer;
+        margin-right: 20px;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        background: #7f1d1d;
+        color: white;
+        transition: 0.3s ease;
+        padding: 70px 15px 20px 15px;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+    }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+
+    .dropdown-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 6px;
+        color: #f8fafc;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 15px 20px;
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
+
+
+
+        .dropdown-btn:hover {
+            background: #991b1b;
+        }
+
+        .dropdown-btn.active {
+            background: #991b1b;
+        }
+
+        .dropdown-btn::after {
+            content: "▶";
+            float: right;
+            transition: transform 0.3s;
+        }
+
+        .dropdown-btn.active::after {
+            content: "▼";
+            transform: rotate(180deg);
+        }
+
+    .dropdown-container {
+        display: none;
+        padding-left: 20px;
+        background: #991b1b;
+    }
+
+        .dropdown-container a {
+            display: block;
+            padding: 12px 20px;
+            color: #f8fafc;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+            .dropdown-container a:hover {
+                background: #b91c1c;
+                padding-left: 28px;
+            }
+
+    #logout {
+        background: #B22222;
+        color: #fff;
+        text-decoration: none;
+        height: 45px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        #logout:hover {
+            background-color: #8B0000;
+        }
+
+    .bell-icon {
+        position: relative;
+        font-size: 22px;
+        text-decoration: none;
+        color: #333;
+        display: inline-block;
+        margin-left: 8rem;
+    }
+
+        .bell-icon:hover {
+            text-decoration: none;
+        }
+
+    .badge {
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        background-color: #fff;
+        color: #B22222;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 50%;
+        min-width: 18px;
+        text-align: center;
+    }
+
+    .content {
+        margin-left: 15rem;
+        color: red;
+        padding: 30px;
+        transition: 0.3s ease;
+    }
+
+        .content.shift {
+            margin-left: 250px;
+        }
+
+    .chart-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-width: 500px;
+    }
+</style>
+
+<div class="topbar">
+    <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+
+    <h3>DONOR ORGANIZATION DASHBOARD</h3>
+
+    <div class="bell-container">
+        <a asp-controller="Notifications"
+           asp-action="GetNotifications"
+           class="bell-icon"
+           id="bellicon"
+           aria-label="Notifications">
+            🔔
+
+            @if (ViewBag.UnreadCount != null && ViewBag.UnreadCount > 0)
+            {
+                <div class="badge" id="badge-count">
+                    @(ViewBag.UnreadCount == 99 ? "99+" : ViewBag.UnreadCount.ToString());
+                </div>
+            }
+
+        </a>
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <button class="dropdown-btn">MANAGE DONOR</button>
+    <div class="dropdown-container">
+        <a asp-controller="Donors" asp-action="RegisterDonorByOrganization">Register New Donor</a>
+        <a asp-controller="Donors" asp-action="GetDonorsByDonorOrganizationId">View All Members</a>
+
+    </div>
+
+    <button class="dropdown-btn">MANAGE PROFILE</button>
+    <div class="dropdown-container">
+        <a asp-controller="DonorOrganization" asp-action="ViewProfile">View Profile</a>
+        <a asp-controller="Users" asp-action="UpdatePassword">Change Password</a>
+    </div>
+
+    <button class="dropdown-btn">MANAGE NOTIFICATION</button>
+    <div class="dropdown-container">
+        <a asp-controller="Notifications" asp-action="SendNotification">Send Notification</a>
+    </div>
+    <a asp-controller="Users" asp-action="Login" id="logout">Log Out</a>
+</div>
+
+<div class="content" id="content">
+    <h2>Statistics Overview On Donations</h2>
+    <div class="chart-container">
+        <canvas id="pieChart" width="600" height="600"></canvas>
+    </div>
+    @* <div class="chart-container">
+        <canvas id="pieChart2" width="600" height="600"></canvas>
+    </div> *@
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+     Chart.register(ChartDataLabels);
+
+    document.querySelectorAll(".dropdown-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            this.classList.toggle("active");
+            const container = this.nextElementSibling;
+            container.style.display = container.style.display === "block" ? "none" : "block";
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById("sidebar");
+        const content = document.getElementById("content");
+        const menuBtn = document.querySelector(".menu-btn");
+
+        function toggleSidebar() {
+            sidebar.classList.toggle("active");
+            content.classList.toggle("shift");
+        }
+
+        window.toggleSidebar = toggleSidebar;
+
+        document.addEventListener("click", function (event) {
+            const clickedInsideSidebar = sidebar.contains(event.target);
+            const clickedMenuBtn = menuBtn.contains(event.target);
+
+            if (!clickedInsideSidebar && !clickedMenuBtn) {
+                sidebar.classList.remove("active");
+                content.classList.remove("shift");
+            }
+        });
+
+       pieContent = document.getElementById('pieChart').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Successful Donations', 'Healthy Donations', 'Total Donations'],
+               datasets:[{
+                   data: [@ViewBag.SuccessfulDonations, @ViewBag.HealthyDonations, @ViewBag.TotalDonations],
+                   backgroundColor: ["Blue","red","green"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+
+        pieContent = document.getElementById('pieChart2').getContext('2d');
+       new Chart(pieContent, {
+           type: 'pie',
+           data:{
+               labels: ['Total Donors', 'Available Donors'],
+               datasets:[{
+                   data: [@ViewBag.TotalDonors, @ViewBag.AvailableDonors],
+
+                   backgroundColor: ["Red", "Green"],
+                   borderColor: '#fff',
+                   borderWidth: 2
+               }]
+           },
+           options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            datalabels: {
+                color: '#fff',
+                formatter: (value) => {
+                    return value;
+                },
+                font: {
+                    weight: 'bold',
+                    size: 20
+                }
+            }
+        }
+           }
+       });
+    });
+</script>

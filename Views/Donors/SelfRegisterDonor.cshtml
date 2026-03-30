@@ -1,0 +1,325 @@
+﻿@using BloodHeroA.Models.Enums
+@model BloodHeroA.DTOs.DonorRequestDto
+
+@{
+    ViewData["Title"] = "Donor Registration";
+    Layout = null;
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 60px;
+    }
+
+    .card {
+        width: 420px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-color: #b30000;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #b30000;
+        }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #b30000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
+
+        .btn:hover {
+            background-color: #800000;
+        }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #842029;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .validation-error {
+        color: red;
+        font-size: 13px;
+    }
+
+</style>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            🩸 Donor Registration
+        </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+            @if (TempData["success"] != null)
+            {
+                <div class="alert-danger">
+                    @TempData["success"]
+                </div>
+            }
+            <div class="form-group">
+                <h3>
+                    Note: <span style="color: red;">
+                        All information provided must be accurate as any misleading <br />
+                        information is punishable in accordance with the constitution.
+                    </span>
+                </h3>
+            </div>
+
+            <form asp-action="SelfRegisterDonor" method="post">
+                @Html.AntiForgeryToken()
+
+
+                <div class="form-group">
+                    <label asp-for="FirstName">First Name</label>
+                    <input asp-for="FirstName" placeholder="First Name" />
+                    <span asp-validation-for="FirstName" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MiddleName">Middle Name</label>
+                    <input asp-for="MiddleName" placeholder="Middle Name" />
+                    <span asp-validation-for="MiddleName" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastName">Last Name</label>
+                    <input asp-for="LastName" placeholder="Last Name" />
+                    <span asp-validation-for="LastName" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" placeholder="Enter email address" />
+                    <span asp-validation-for="Email" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" placeholder="Enter phone number" />
+                    <span asp-validation-for="PhoneNumber" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <div>
+                        <input asp-for="Password" type="password" placeholder="Password" />
+
+                    </div>
+
+                    <span asp-validation-for="Password" class="validation-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" type="password" placeholder="ConfirmPassword"></>
+                    <span asp-validation-for="ConfirmPassword" class="validation-error"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="MaritalStatus" class="form-label">Marital Status</label>
+                    <select asp-for="MaritalStatus"
+                            asp-items="Html.GetEnumSelectList<MaritalStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Marital Status --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BloodGroup" class="form-label">Blood Group</label>
+                    <select asp-for="BloodGroup"
+                            asp-items="Html.GetEnumSelectList< BloodGroup>()"
+                            class="form-control">
+                        <option value="">-- Select Blood Group --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                    <input asp-for="DateOfBirth" class="form-control" type="date" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label"> Gender</label>
+                    <select asp-for="Gender"
+                            asp-items="Html.GetEnumSelectList<Gender>()"
+                            class="form-control">
+                        <option value="">-- Select Gender --</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="StateOfOrigin" class="form-label">State Of Origin</label>
+                    <select asp-for="StateOfOrigin"
+                            asp-items="Html.GetEnumSelectList<StateOfOrigin>()"
+                            class="form-control">
+                        <option value="">-- Select State Of Origin --</option>
+                    </select>
+                </div>
+              
+                @* <div class="mb-3">
+                    <label asp-for="Gender" class="form-label"> Gender</label>
+                    <select asp-for="Gender"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Gender --</option>
+                    </select>
+                </div> *@
+
+                @* <div class="mb-3">
+                    <label asp-for="HIV" class="form-label"> HIV Status</label>
+                    <select asp-for="HIV"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+             
+                @* <div class="mb-3">
+                    <label asp-for="HepatitisB" class="form-label"> Hepatitis B Status</label>
+                    <select asp-for="HepatitisB"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+
+                @* <div class="mb-3">
+                    <label asp-for="Syphilis" class="form-label"> Syphilis Status</label>
+                    <select asp-for="Syphilis"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+
+                @* <div class="mb-3">
+                    <label asp-for="Cancer" class="form-label"> Cancer Status</label>
+                    <select asp-for="Cancer"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+
+                <div class="mb-3">
+                    <label asp-for="Tattoo" class="form-label"> Tatto Mark</label>
+                    <select asp-for="Tattoo"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div>
+
+                @* <div class="mb-3">
+                    <label asp-for="ChronicDisease" class="form-label"> Chronic Disease Status</label>
+                    <select asp-for="ChronicDisease"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+               
+                @* <div class="mb-5">
+                    <label asp-for="HeartDisease" class="form-label"> Heart Disease Status</label>
+                    <select asp-for="HeartDisease"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+
+                @* <div class="mb-3">
+                    <label asp-for="Hemophilic" class="form-label"> Hemophilic Status</label>
+                    <select asp-for="Hemophilic"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+
+                <div class="mb-3">
+                    <label asp-for="IVDrugConsumer" class="form-label"> IV Drug Consumer?</label>
+                    <select asp-for="IVDrugConsumer"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div>
+
+                @* <div class="mb-3">
+                    <label asp-for="SevereLungsDisease" class="form-label"> Severe Lungs Disease Status</label>
+                    <select asp-for="SevereLungsDisease"
+                            asp-items="Html.GetEnumSelectList<HealthStatus>()"
+                            class="form-control">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                </div> *@
+               
+                <button type="submit" class="btn">
+                    Register 
+                </button>
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+
+      
