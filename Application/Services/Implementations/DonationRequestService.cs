@@ -336,7 +336,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 UnitsRequested = donationRequest.UnitsRequested,
                 BankigOrganizationName = donationRequest.BankingOrganization?.OrganizationName ?? "",
                 Status = donationRequest.RequestStatus
-            }).ToList();
+            }).DistinctBy(r => r.Id).ToList();
 
             return new BaseResponse<IEnumerable<DonationRequestResponseDto>>
             {
