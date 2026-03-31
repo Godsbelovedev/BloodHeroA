@@ -76,6 +76,11 @@ namespace BloodHeroA.Application.Services.Implementations
                 Role = Role.Donor
             };
 
+            if (donorDto.Tattoo == HealthStatus.Positive || donorDto.IVDrugConsumer == HealthStatus.Positive)
+            {
+                return BaseResponse<DonorResponseDto>.
+                Failure("not a qualified donor");
+            }
             if (DonorService.CheckAge(donorDto.DateOfBirth) < 18)
             {
                 return BaseResponse<DonorResponseDto>.
@@ -166,7 +171,13 @@ namespace BloodHeroA.Application.Services.Implementations
                 Role = Role.Donor
             };
 
-            if(DonorService.CheckAge(donorDto.DateOfBirth) < 18)
+            if (donorDto.Tattoo == HealthStatus.Positive || donorDto.IVDrugConsumer == HealthStatus.Positive)
+            {
+                return BaseResponse<DonorResponseDto>.
+                Failure("not a qualified donor");
+            }
+
+            if (DonorService.CheckAge(donorDto.DateOfBirth) < 18)
             {
                 return BaseResponse<DonorResponseDto>.
                 Failure("age below requirement, create fail");

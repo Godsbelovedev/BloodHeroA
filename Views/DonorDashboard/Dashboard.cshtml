@@ -176,6 +176,21 @@
 
     <h3>RECIPIENT ORGANIZATION DASHBOARD</h3>
 
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["failure"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["failure"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="bell-container">
         <a asp-controller="Notifications"
            asp-action="GetNotifications"

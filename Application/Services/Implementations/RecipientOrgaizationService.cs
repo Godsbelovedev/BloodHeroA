@@ -99,13 +99,13 @@ namespace BloodHeroA.Application.Services.Implementations
             var userToDelete = await _recipientOrganization.GetByIdAsync(id);
             if (userToDelete is null)
             {
-                return BaseResponse<bool>.Failure("organization do not exist");
+                return BaseResponse<bool>.Failure("organization do not exist, delete fail");
             }
             userToDelete.IsDeleted = true;
             userToDelete.User!.IsDeleted = true;
             userToDelete.User.IsAvailable = false;
             await _unitOfWork.SaveChangesAsync();
-            return BaseResponse<bool>.Success(true);
+            return BaseResponse<bool>.Success(true, "delete successful");
         }
 
         public async Task<BaseResponse<IEnumerable<RecipientResponseDto>>> GetAllAsync()

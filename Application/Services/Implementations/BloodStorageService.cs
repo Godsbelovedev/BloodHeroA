@@ -68,8 +68,22 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 return BaseResponse<BloodStorageResponseDto>.Failure("donation not found");
             }
-
-            var existingStorage = await _bloodStorageRepository
+            if (donation.Donor.Tattoo == HealthStatus.Positive || 
+                donation.Donor.IVDrugConsumer == HealthStatus.Positive
+                || donation.BloodTestResult?.Tattoo == HealthStatus.Positive
+                || donation.BloodTestResult?.IVDrugConsumer == HealthStatus.Positive
+                || donation.Donor.HIV == HealthStatus.Positive
+                || donation.Donor.HepatitisB == HealthStatus.Positive
+                || donation.Donor.Cancer == HealthStatus.Positive
+                || donation.Donor.HeartDisease == HealthStatus.Positive
+                || donation.Donor.Hemophilic == HealthStatus.Positive
+                || donation.Donor.ChronicDisease == HealthStatus.Positive
+                || donation.Donor.SevereLungsDisease == HealthStatus.Positive
+                )
+            {
+                return BaseResponse<BloodStorageResponseDto>.Failure("donation not healthy for storage");
+            }
+        var existingStorage = await _bloodStorageRepository
                 .FindAsync(r => !r.IsDeleted && !r.IsReleased && r.DonationId == bloodStorage.DonationId);
             if (existingStorage is not null)
             {

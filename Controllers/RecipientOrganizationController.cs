@@ -53,7 +53,7 @@ namespace BloodHeroA.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Error = response.Message;
+            ViewBag.Success = response.Message;
             return View(response.Data);
         }
 
@@ -134,11 +134,11 @@ namespace BloodHeroA.Controllers
             var organizationToDelete = await _organization.DeleteAsync(id);
             if (!organizationToDelete.Status)
             {
-                TempData["failure"] = "failed to delete  blood bank";
+                TempData["failure"] = organizationToDelete.Message;
             }
             if (organizationToDelete.Status)
             {
-                TempData["success"] = "blood bank deleted  successfully";
+                TempData["success"] = organizationToDelete.Message;
             }
             return RedirectToAction("ViewAll");
         }

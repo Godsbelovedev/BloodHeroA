@@ -40,6 +40,8 @@
         background-color: #B22222;
         color: white;
         text-decoration: none;
+        border-color:aliceblue;
+        border-radius: 6px;
     }
 
     .error-msg {
@@ -87,22 +89,23 @@
                             <td>@request.BloodType</td>
                             <td>@request.UnitsRequested</td>
                             <td>@request.Status</td>
-                            <td>@request.RequestDate.ToString("dd MMM yyyy")</td>
-                            <td>
+                            <td>@request.RequestDate.ToString("dd MMM yyyy HH:mm")</td>
+
+                            <td style="display: flex; flex-direction:column;">
                                 <a asp-action="GetById" asp-route-Id="@request.Id" id="details">View Details</a>
+                            
+                                @if(request.Status != Status.Completed)
+                                {
+                                        <a   asp-controller="BloodStorages"
+                                             asp-action="GetStorageForSupply"
+                                           asp-route-requestId="@request.Id"
+                                             asp-route-bloodGroup="@request.BloodType"
+                                             id="details"
+                                        style="margin-top:12px;">Attend To Request
+                                             
+                                        </a>
+                                }
                             </td>
-                            @if(request.Status != Status.Completed)
-                            {
-                                <td>
-                                    <a   asp-controller="BloodStorages"
-                                         asp-action="GetStorageForSupply"
-                                       asp-route-requestId="@request.Id"
-                                         asp-route-bloodGroup="@request.BloodType"
-                                         id="details">Attend To Request
-                                    </a>
-                                </td>
-                            }
-                           
                         </tr>
                     }
                 }

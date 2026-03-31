@@ -1,4 +1,5 @@
 ﻿using BloodHeroA.Application.Services.Interfaces;
+using BloodHeroA.DTOs;
 using BloodHeroA.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,110 +22,85 @@ namespace BloodHeroA.Controllers
             var bloodTypeO_Positive = await _inventoryService.
                GetAllInventoryForBloodGroupO_PositiveByBankingOrganizationIdAsync();
 
-            var oPositiveDetails = bloodTypeO_Positive.Data;
-            if (oPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.OpositiveReleased = oPositiveDetails.ReleasedUnits;
-            ViewBag.OpositiveStored = oPositiveDetails.StoredUnits;
-            ViewBag.OpositiveExpired = oPositiveDetails.ExpiredUnits;
-            ViewBag.OpositiveAvailable = oPositiveDetails.AvailableUnits;
+            var oPositiveDetails = bloodTypeO_Positive.Data ?? new BloodInventoryResponseDTO();
+
+            ViewBag.OpositiveReleased = oPositiveDetails?.ReleasedUnits ?? 0;
+            ViewBag.OpositiveStored = oPositiveDetails?.StoredUnits ?? 0;
+            ViewBag.OpositiveExpired = oPositiveDetails?.ExpiredUnits ?? 0;
+            ViewBag.OpositiveAvailable = oPositiveDetails?.AvailableUnits ?? 0;
 
             var bloodTypeO_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupO_NegativeByBankingOrganizationIdAsync();
 
-            var oNegativeDetails = bloodTypeO_Negative.Data;
-            if (oNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ONegativeReleased = oNegativeDetails.ReleasedUnits;
-            ViewBag.ONegativeStored = oNegativeDetails.StoredUnits;
-            ViewBag.ONegativeExpired = oNegativeDetails.ExpiredUnits;
-            ViewBag.ONegativeAvailable = oNegativeDetails.AvailableUnits;
+            var oNegativeDetails = bloodTypeO_Negative.Data ?? new BloodInventoryResponseDTO();
+            ViewBag.ONegativeReleased = oNegativeDetails?.ReleasedUnits ?? 0;
+            ViewBag.ONegativeStored = oNegativeDetails?.StoredUnits ?? 0;
+            ViewBag.ONegativeExpired = oNegativeDetails?.ExpiredUnits ?? 0;
+            ViewBag.ONegativeAvailable = oNegativeDetails?.AvailableUnits ?? 0;
 
 
             var bloodTypeA_Positive = await _inventoryService.
             GetAllInventoryForBloodGroupA_PositiveByBankingOrganizationIdAsync();
 
-            var aPositiveDetails = bloodTypeA_Positive.Data;
-            if (aPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.APositiveReleased = aPositiveDetails.ReleasedUnits;
-            ViewBag.APositiveStored = aPositiveDetails.StoredUnits;
-            ViewBag.APositiveExpired = aPositiveDetails.ExpiredUnits;
-            ViewBag.APositiveAvailable = aPositiveDetails.AvailableUnits;
+            var aPositiveDetails = bloodTypeA_Positive.Data ?? new BloodInventoryResponseDTO();
+            
+            ViewBag.APositiveReleased = aPositiveDetails?.ReleasedUnits ?? 0;
+            ViewBag.APositiveStored = aPositiveDetails?.StoredUnits ?? 0;
+            ViewBag.APositiveExpired = aPositiveDetails?.ExpiredUnits ?? 0;
+            ViewBag.APositiveAvailable = aPositiveDetails?.AvailableUnits?? 0;
 
 
 
             var bloodTypeA_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupA_NegativeByBankingOrganizationIdAsync();
 
-            var aNegativeDetails = bloodTypeA_Negative.Data;
-            if (aNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ANegativeReleased = aNegativeDetails.ReleasedUnits;
-            ViewBag.ANegativeStored = aNegativeDetails.StoredUnits;
-            ViewBag.ANegativeExpired = aNegativeDetails.ExpiredUnits;
-            ViewBag.ANegativeAvailable = aNegativeDetails.AvailableUnits;
+            var aNegativeDetails = bloodTypeA_Negative.Data ?? new BloodInventoryResponseDTO();
+           
+            ViewBag.ANegativeReleased = aNegativeDetails?.ReleasedUnits ?? 0;
+            ViewBag.ANegativeStored = aNegativeDetails?.StoredUnits ?? 0;
+            ViewBag.ANegativeExpired = aNegativeDetails?.ExpiredUnits ?? 0;
+            ViewBag.ANegativeAvailable = aNegativeDetails?.AvailableUnits ?? 0;
 
             var bloodTypeB_Positive = await _inventoryService.
             GetAllInventoryForBloodGroupB_PositiveByBankingOrganizationIdAsync();
 
-            var bPositiveDetails = bloodTypeB_Positive.Data;
-            if (bPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.BPositiveReleased = bPositiveDetails.ReleasedUnits;
-            ViewBag.BPositiveStored = bPositiveDetails.StoredUnits;
-            ViewBag.BPositiveExpired = bPositiveDetails.ExpiredUnits;
-            ViewBag.BPositiveAvailable = bPositiveDetails.AvailableUnits;
+            var bPositiveDetails = bloodTypeB_Positive.Data ?? new BloodInventoryResponseDTO();
+         
+            ViewBag.BPositiveReleased = bPositiveDetails?.ReleasedUnits ?? 0;
+            ViewBag.BPositiveStored = bPositiveDetails?.StoredUnits ?? 0;
+            ViewBag.BPositiveExpired = bPositiveDetails?.ExpiredUnits ?? 0;
+            ViewBag.BPositiveAvailable = bPositiveDetails?.AvailableUnits ?? 0;
 
 
             var bloodTypeB_Negative = await _inventoryService.
           GetAllInventoryForBloodGroupB_NegativeByBankingOrganizationIdAsync();
 
-            var bNegativeDetails = bloodTypeB_Negative.Data;
-            if (bNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.BNegativeReleased = bNegativeDetails.ReleasedUnits;
-            ViewBag.BNegativeStored = bNegativeDetails.StoredUnits;
-            ViewBag.BNegativeExpired = bNegativeDetails.ExpiredUnits;
-            ViewBag.BNegativeAvailable = bNegativeDetails.AvailableUnits;
+            var bNegativeDetails = bloodTypeB_Negative.Data ?? new BloodInventoryResponseDTO();
+           
+            ViewBag.BNegativeReleased = bNegativeDetails?.ReleasedUnits ?? 0;
+            ViewBag.BNegativeStored = bNegativeDetails?.StoredUnits ?? 0;
+            ViewBag.BNegativeExpired = bNegativeDetails?.ExpiredUnits ?? 0;
+            ViewBag.BNegativeAvailable = bNegativeDetails?.AvailableUnits ?? 0;
 
             var bloodTypeAB_Positive = await _inventoryService.
            GetAllInventoryForBloodGroupAB_PositiveByBankingOrganizationIdAsync();
 
-            var aBPositiveDetails = bloodTypeAB_Positive.Data;
-            if (aBPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ABPositiveReleased = aBPositiveDetails.ReleasedUnits;
-            ViewBag.ABPositiveStored = aBPositiveDetails.StoredUnits;
-            ViewBag.ABPositiveExpired = aBPositiveDetails.ExpiredUnits;
-            ViewBag.ABPositiveAvailable = aBPositiveDetails.AvailableUnits;
+            var aBPositiveDetails = bloodTypeAB_Positive.Data ?? new BloodInventoryResponseDTO();
+          
+            ViewBag.ABPositiveReleased = aBPositiveDetails?.ReleasedUnits ?? 0;
+            ViewBag.ABPositiveStored = aBPositiveDetails?.StoredUnits ?? 0;
+            ViewBag.ABPositiveExpired = aBPositiveDetails?.ExpiredUnits ?? 0;
+            ViewBag.ABPositiveAvailable = aBPositiveDetails?.AvailableUnits ?? 0;
 
             var bloodTypeAB_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupAB_NegativeByBankingOrganizationIdAsync();
 
-            var aBNegativeDetails = bloodTypeAB_Negative.Data;
-            if (aBNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ABNegativeReleased = aBNegativeDetails.ReleasedUnits;
-            ViewBag.ABNegativeStored = aBNegativeDetails.StoredUnits;
-            ViewBag.ABNegativeExpired = aBNegativeDetails.ExpiredUnits;
-            ViewBag.ABNegativeAvailable = aBNegativeDetails.AvailableUnits;
+            var aBNegativeDetails = bloodTypeAB_Negative.Data ?? new BloodInventoryResponseDTO();
+            
+            ViewBag.ABNegativeReleased = aBNegativeDetails?.ReleasedUnits ?? 0;
+            ViewBag.ABNegativeStored = aBNegativeDetails?.StoredUnits ?? 0;
+            ViewBag.ABNegativeExpired = aBNegativeDetails?.ExpiredUnits ?? 0;
+            ViewBag.ABNegativeAvailable = aBNegativeDetails?.AvailableUnits ?? 0;
 
             return View();
         }

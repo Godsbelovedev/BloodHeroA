@@ -176,6 +176,12 @@
 
     <h3>DONOR ORGANIZATION DASHBOARD</h3>
 
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["success"]
+        </div>
+    }
     <div class="bell-container">
         <a asp-controller="Notifications"
            asp-action="GetNotifications"
@@ -190,7 +196,7 @@
                     @(ViewBag.UnreadCount == 99 ? "99+" : ViewBag.UnreadCount.ToString());
                 </div>
             }
-
+            
         </a>
     </div>
 </div>

@@ -106,6 +106,20 @@
                 @ViewBag.Success
             </div>
         }
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["failure"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["failure"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
         @if (Model != null)
         {

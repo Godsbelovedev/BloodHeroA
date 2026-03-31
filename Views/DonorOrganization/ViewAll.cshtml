@@ -141,6 +141,16 @@
 
         <h2>Registered Donor Organizations</h2>
 
+        @if (TempData["failure"] != null)
+        {
+            <div class="alert alert-danger">@TempData["failure"]</div>
+        }
+
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success">@TempData["success"]</div>
+        }
+
         @if (Model == null || !Model.Any())
         {
             <p style="text-align:center;color:red;">No Donor Organization registered yet.</p>

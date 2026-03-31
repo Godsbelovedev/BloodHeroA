@@ -1,6 +1,7 @@
 ﻿using BloodHeroA.Application.Services.Interfaces;
 using BloodHeroA.DTOs;
 using BloodHeroA.Models.Entities;
+using BloodHeroA.Models.Enums;
 using BloodHeroA.Repositories.IRepositories;
 
 namespace BloodHeroA.Application.Services.Implementations
@@ -33,13 +34,21 @@ namespace BloodHeroA.Application.Services.Implementations
             Guid senderId;
             string adminIdInString = "dd38778b-eab3-4107-82f3-81e2c9d0f4d9";
             bool IsValidAdminId = Guid.TryParse(adminIdInString, out Guid adminId);
-            if(currentUser != null)
+
+            string senderName;
+            string senderEmail;
+
+            if (currentUser == null || currentUser.Role == Role.Admin)
             {
-                senderId = currentUser.Id;
+                senderName = "Admin";
+                senderEmail = "admin@bloodhero.com";
+                senderId = adminId;
             }
             else
             {
-                senderId = adminId;
+                senderName = currentUser.FullName;
+                senderEmail = currentUser.Email;
+                senderId = currentUser.Id;
             }
             var receiver = await _userRepository.GetUserAsync(d => d.Email == dTO.ReceiverEmail);
             if (receiver is null)
@@ -70,9 +79,9 @@ namespace BloodHeroA.Application.Services.Implementations
                 Id = notification.Id,
                 Message = notification.Message,
                 SentDate = notification.DateSent,
-                SenderName = currentUser?.FullName ?? "Admin blood hero",
-                Subject = dTO.Subject ?? "",
-                SenderEmail = currentUser?.Email ?? "admin@bloodhero.com"
+                SenderName = senderName,
+                Subject = dTO.Subject,
+                SenderEmail = senderEmail
             };
             return BaseResponse<NotificationResponseDto>.Success(dto);
 
@@ -179,12 +188,12 @@ namespace BloodHeroA.Application.Services.Implementations
                     Status = false
                 };
             }
-            var listOfMesaages = new List<NotificationResponseDto>();
+            var listOfMessages = new List<NotificationResponseDto>();
             foreach (var notification in allNotifications)
             {
                 var sender = await _userRepository.GetUserByIdAsync(notification.SenderId);
                
-                listOfMesaages.Add(new NotificationResponseDto
+                listOfMessages.Add(new NotificationResponseDto
                 {
                     Message = notification.Message,
                     Id = notification.Id,
@@ -198,7 +207,7 @@ namespace BloodHeroA.Application.Services.Implementations
             }
             return new BaseResponse<IEnumerable<NotificationResponseDto>>
             {
-                Data = listOfMesaages,
+                Data = listOfMessages,
                 Message = "retrieved successfully",
                 Status = true
             };
