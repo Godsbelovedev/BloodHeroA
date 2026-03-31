@@ -5,6 +5,7 @@ namespace BloodHeroA.Models.Entities
     public class DonationRequest
     {
         public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid GeneralId { get; set; }
         public RecipientOrganization RecipientOrganization { get; set; } = default!;
         public Guid RecipientOrganizationId { get; set; }
         public BankingOrganization BankingOrganization { get; set; } = default!;

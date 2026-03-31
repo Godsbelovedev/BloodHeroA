@@ -16,6 +16,7 @@ namespace BloodHeroA.DTOs
         public class DonationRequestResponseDto
         {
             public Guid Id { get; set; }
+            public Guid GeneralId { get; set; }
             public string RecipientOrganizationName { get; set; } = default!;
             public string BankigOrganizationName { get; set; } = default!;
             public BloodGroup BloodType { get; set; }

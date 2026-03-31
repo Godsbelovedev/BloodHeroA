@@ -159,7 +159,7 @@
                     Submit Donation
                 </button>
             </form>
-            @if (Model.DonorOrganizationId != null)
+            @if (Model.DonorOrganizationId.HasValue && Model.DonorOrganizationId != Guid.Empty)
             {
                 <a asp-controller="Donors"
                    asp-route-action="GetAvailableDonorsByDonorOrganizationId"

@@ -83,7 +83,7 @@ namespace BloodHeroA.Application.Services.Implementations
 
                 var intendedRequest = new DonationRequest
                 {
-                    Id = requestId,
+                    GeneralId = requestId,
                     BloodTypeNeeded = donationRequest.BloodTypeNeeded,
                     BankingOrganizationId = organization.Id,
                     Note = donationRequest.Note,
@@ -111,6 +111,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 createdRequestResponse.Add(new DonationRequestResponseDto
                 {
                     Id = intendedRequest.Id,
+                    GeneralId = intendedRequest.GeneralId,
                     BloodType = intendedRequest.BloodTypeNeeded,
                     Note = intendedRequest.Note,
                     RecipientOrganizationName = bankingOrganizationToRecieve.OrganizationName,
@@ -183,7 +184,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 
                 var intendedRequest = new DonationRequest
                 {
-                    Id = requestId,
+                    GeneralId = requestId,
                     BloodTypeNeeded = donationRequest.BloodTypeNeeded,
                     BankingOrganizationId = organization.Id,
                     Note = donationRequest.Note,
@@ -206,12 +207,12 @@ namespace BloodHeroA.Application.Services.Implementations
                     ReceiverEmail = organization.Email
                 };
                 await _donationRequest.CreateAsync(intendedRequest);
-                await _unitOfWork.SaveChangesAsync();
                 await _notificationService.SendNotificationAsync(notificationDto);
 
                 createdRequestResponse.Add(new DonationRequestResponseDto
                 {
                     Id = intendedRequest.Id,
+                    GeneralId = intendedRequest.GeneralId,
                     BloodType = intendedRequest.BloodTypeNeeded,
                     Note = intendedRequest.Note,
                     RecipientOrganizationName = recipientOrganization.OrganizationName,
@@ -260,6 +261,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 listOfAllRequests.Add(new DonationRequestResponseDto
                 {
                     Id = donationRequest.Id,
+                    GeneralId = donationRequest.GeneralId,
                     BloodType = donationRequest.BloodTypeNeeded,
                     Note = donationRequest.Note,
                     RecipientOrganizationName = donationRequest.RecipientOrganization.OrganizationName,
@@ -286,6 +288,7 @@ namespace BloodHeroA.Application.Services.Implementations
             var donationRequestResponse = new DonationRequestResponseDto
                 {
                     Id = donationRequest.Id,
+                    GeneralId = donationRequest.GeneralId,
                     BloodType = donationRequest.BloodTypeNeeded,
                     Note = donationRequest.Note,
                     RecipientOrganizationName = donationRequest.RecipientOrganization.OrganizationName,
@@ -329,6 +332,7 @@ namespace BloodHeroA.Application.Services.Implementations
             var listOfAllRequests = donationRequests.Select(donationRequest => new DonationRequestResponseDto
             {
                 Id = donationRequest.Id,
+                GeneralId = donationRequest.GeneralId,
                 BloodType = donationRequest.BloodTypeNeeded,
                 Note = donationRequest.Note,
                 RecipientOrganizationName = donationRequest.RecipientOrganization?.OrganizationName ?? "",
@@ -336,7 +340,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 UnitsRequested = donationRequest.UnitsRequested,
                 BankigOrganizationName = donationRequest.BankingOrganization?.OrganizationName ?? "",
                 Status = donationRequest.RequestStatus
-            }).DistinctBy(r => r.Id).ToList();
+            }).DistinctBy(r => r.GeneralId).ToList();
 
             return new BaseResponse<IEnumerable<DonationRequestResponseDto>>
             {
@@ -377,6 +381,7 @@ namespace BloodHeroA.Application.Services.Implementations
             var listOfAllRequests = donationRequests.Select(donationRequest => new DonationRequestResponseDto
             {
                 Id = donationRequest.Id,
+                GeneralId = donationRequest.GeneralId,
                 BloodType = donationRequest.BloodTypeNeeded,
                 Note = donationRequest.Note,
                 RecipientOrganizationName = donationRequest.RecipientOrganization?.OrganizationName ?? "",
