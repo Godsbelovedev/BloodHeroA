@@ -6,3 +6,7 @@
 # Ignore build folders
 bin/
 obj/
+
+# Ignore sensitive config files
+appsettings.Development.json
+appsettings.*.json
