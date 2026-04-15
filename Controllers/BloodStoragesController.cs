@@ -78,7 +78,7 @@ namespace BloodHeroA.Controllers
             return View(storages.Data);
         }
         [HttpGet]
-        public async Task<IActionResult> GetStorageForSupply(BloodGroup bloodGroup, Guid? requestId)
+        public async Task<IActionResult> GetStorageForSupply(BloodGroup bloodGroup, Guid requestId)
         {
           
                 var storages = await _bloodStorageService.GetForSupplyAsync(bloodGroup);
@@ -89,6 +89,19 @@ namespace BloodHeroA.Controllers
                 }
                 ViewBag.RequestId = requestId;
                 return View(storages.Data);
+        }
+        public async Task<IActionResult> GetStoragesForMultiSupply
+        (BloodGroup bloodGroup, Guid requestId)
+        {
+            var storages = await _bloodStorageService
+            .GetStoragesForMultiSupplyAsync(bloodGroup);
+            if (!storages.Status)
+            {
+                ViewBag.Error = storages.Message;
+                return View(new List<BloodStorageResponseDto>());
+            }
+            ViewBag.RequestId = requestId;
+            return View(storages.Data);
         }
         public async Task<IActionResult> GetExpired()
         {

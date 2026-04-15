@@ -7,6 +7,8 @@ namespace BloodHeroA.DTOs
     {
         [Required]
         public string ReceiverEmail { get; set; } = default!;
+        [Required]
+        public string SendererEmail { get; set; } = default!;
         public string Subject { get; set; } = default!;
         [Required]
         public string Message { get; set; } = default!;

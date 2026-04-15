@@ -7,8 +7,8 @@ namespace BloodHeroA.DTOs
         {
             public Guid DonationRequestId { get; set; }
             public Guid BloodStorageId { get; set; }
-            public BloodGroup BloodTypeReleased { get; set; }
-            public int QuantityReleased { get; set; } = 1;
+            //public BloodGroup BloodTypeReleased { get; set; }
+            public int UnitToRelease { get; set; }
             //[Required]
             //public string EssenceOfRelease { get; set; } = default!;
         }

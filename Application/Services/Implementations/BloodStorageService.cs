@@ -3,8 +3,7 @@ using BloodHeroA.DTOs;
 using BloodHeroA.Models.Entities;
 using BloodHeroA.Models.Enums;
 using BloodHeroA.Repositories.IRepositories;
-using Org.BouncyCastle.Utilities.Collections;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 namespace BloodHeroA.Application.Services.Implementations
 {
@@ -98,7 +97,7 @@ namespace BloodHeroA.Application.Services.Implementations
               DonationId = bloodStorage.DonationId,
               StorageLocation = bloodStorage.Location,
               UnitStored = 1,
-              ExpiryDate = DateTime.UtcNow.AddDays(60)
+              ExpiryDate = DateTime.UtcNow.AddMinutes(6)
             };
 
             storage.IsExpired = storage.ExpiryDate < DateTime.UtcNow;
@@ -108,7 +107,8 @@ namespace BloodHeroA.Application.Services.Implementations
             await _bloodStorageRepository.CreateStorageAsync(storage);
 
             var inventory = await _bloodInventoryRepository.FindAsync
-                (e => e.BankingOrganizationId == organization.Id && e.BloodGroup == bloodStorage.BloodGroup);
+                (e => e.BankingOrganizationId == organization.Id && 
+                 e.BloodGroup == bloodStorage.BloodGroup);
             if (inventory != null)
             {
                 inventory.StoredUnits += 1;
@@ -166,6 +166,52 @@ namespace BloodHeroA.Application.Services.Implementations
             return BaseResponse<bool?>.Success(true);
         }
 
+        public async Task<BaseResponse<IEnumerable<BloodStorageResponseDto>>>
+                GetStoragesForMultiSupplyAsync(BloodGroup bloodGroup)
+        {
+            var currentUser = await _authService.GetCurrentUser();
+            if(currentUser == null)
+            {
+                return BaseResponse<IEnumerable<BloodStorageResponseDto>>
+                .Failure("user not Authenticated");
+            }
+            var bankingOrganization = await _bankingOrganization.GetByUserIdAsync(currentUser.Id);
+            if(bankingOrganization == null)
+            {
+                return BaseResponse<IEnumerable <BloodStorageResponseDto>>
+                .Failure("organization not found");
+            }
+           
+            var query = _bloodStorageRepository.GetAvailableBloods(b => _bloodGroups[bloodGroup].Contains
+            (b.BloodGroup) && !b.IsDeleted && !b.IsReleased && !b.IsExpired
+            && b.BankingOrganizationId == bankingOrganization.Id);
+
+            var storages = await query.Take(10).ToListAsync();
+            var orderedStorage = storages.OrderBy(r => _bloodGroups[bloodGroup].IndexOf(r.BloodGroup))
+                                          .ThenBy(r => r.ExpiryDate);
+
+            var listOfStorages = orderedStorage.Select(r => new BloodStorageResponseDto
+            {
+                BankingOrganizationName = r.BankingOrganization.OrganizationName,
+                BloodGroup = r.BloodGroup,
+                DonationId = r.DonationId,
+                DonorFullName = r.Donation.Donor.FirstName + " " + r.Donation.Donor.LastName,
+                DonorId = r.Donation.DonorId,
+                Location = r.StorageLocation,
+                UnitStored = r.UnitStored,
+                Id = r.Id,
+                DateStored = r.CreatedAt,
+                DonorOrganizationName = r.Donation.DonorOrganization?.OrganizationName ?? "nil"
+            }).ToList();
+
+            return new BaseResponse<IEnumerable<BloodStorageResponseDto>>
+            {
+                Data = listOfStorages,
+                Message = "record retrieved successfully",
+                Status = true
+            };
+        }
+
         public async Task<BaseResponse<IEnumerable<BloodStorageResponseDto>>> 
                                GetForSupplyAsync(BloodGroup bloodGroup)
         {
@@ -187,7 +233,7 @@ namespace BloodHeroA.Application.Services.Implementations
           .GetAvailableBloodsAsync(r => _bloodGroups[bloodGroup].Contains(r.BloodGroup)
            && !r.IsDeleted && !r.IsReleased && r.ExpiryDate > DateTime.UtcNow
            && r.BankingOrganizationId == organization.Id))
-          .OrderBy(r => _bloodGroups[bloodGroup].IndexOf(r.BloodGroup)).ToList();
+          .OrderBy(r => _bloodGroups[bloodGroup].IndexOf(r.BloodGroup));
 
             if (!availableBloodType.Any())
             {

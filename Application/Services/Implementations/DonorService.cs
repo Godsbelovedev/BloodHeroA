@@ -115,6 +115,7 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 Subject = "Welcome to Blood Hero!",
                 ReceiverEmail = donorDto.Email,
+                SendererEmail = "admin@bloodhero.com",
                 Message = $"Dear {user.FullName},\r\n\r\n" +
              $"Welcome to Blood Hero! You have been successfully registered.\r\n\r\n" +
              $"You can now make donations, and track your activities through our platform.\r\n\r\n" +
@@ -210,6 +211,7 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 Subject = "Welcome to Blood Hero!",
                 ReceiverEmail = donorDto.Email,
+                SendererEmail = "admin@bloodhero.com",
                 Message = $"Dear {user.FullName},\r\n\r\n" +
                $"Welcome to Blood Hero! You have been successfully registered.\r\n\r\n" +
                $"You can now make donations, and track your activities through our platform.\r\n\r\n" +

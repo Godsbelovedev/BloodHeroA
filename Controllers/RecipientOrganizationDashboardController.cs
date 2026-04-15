@@ -56,81 +56,56 @@ namespace BloodHeroA.Controllers
                 GetAllInventoryForBloodGroupO_PositiveByRecipientOrganizationIdAsync();
 
             var oPositiveDetails = bloodTypeO_Positive.Data;
-            if(oPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.OpositiveReceived = oPositiveDetails.ReleasedUnits;
+          
+            ViewBag.OpositiveReceived = oPositiveDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeO_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupO_NegativeByRecipientOrganizationIdAsync();
 
             var oNegativeDetails = bloodTypeO_Negative.Data;
-            if (oNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ONegativeReceived = oNegativeDetails.ReleasedUnits;
+           
+            ViewBag.ONegativeReceived = oNegativeDetails?.ReleasedUnits ?? 0;
 
            var bloodTypeA_Positive = await _inventoryService.
            GetAllInventoryForBloodGroupA_PositiveByRecipientOrganizationIdAsync();
 
             var aPositiveDetails = bloodTypeA_Positive.Data;
-            if (aPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.APositiveReceived = aPositiveDetails.ReleasedUnits;
+           
+            ViewBag.APositiveReceived = aPositiveDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeA_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupA_NegativeByRecipientOrganizationIdAsync();
 
             var aNegativeDetails = bloodTypeA_Negative.Data;
-            if (aNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ANegativeReceived = aNegativeDetails.ReleasedUnits;
+           
+            ViewBag.ANegativeReceived = aNegativeDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeB_Positive = await _inventoryService.
             GetAllInventoryForBloodGroupB_PositiveByRecipientOrganizationIdAsync();
 
             var bPositiveDetails = bloodTypeB_Positive.Data;
-            if (bPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.BPositiveReceived = bPositiveDetails.ReleasedUnits;
+            ViewBag.BPositiveReceived = bPositiveDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeB_Negative = await _inventoryService.
           GetAllInventoryForBloodGroupB_NegativeByRecipientOrganizationIdAsync();
 
             var bNegativeDetails = bloodTypeB_Negative.Data;
-            if (bNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.BNegativeReceived = bNegativeDetails.ReleasedUnits;
+          
+            ViewBag.BNegativeReceived = bNegativeDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeAB_Positive = await _inventoryService.
            GetAllInventoryForBloodGroupAB_PositiveByRecipientOrganizationIdAsync();
 
             var aBPositiveDetails = bloodTypeAB_Positive.Data;
-            if (aBPositiveDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ABPositiveReceived = aBPositiveDetails.ReleasedUnits;
+           
+            ViewBag.ABPositiveReceived = aBPositiveDetails?.ReleasedUnits ?? 0;
 
             var bloodTypeAB_Negative = await _inventoryService.
             GetAllInventoryForBloodGroupAB_NegativeByRecipientOrganizationIdAsync();
 
             var aBNegativeDetails = bloodTypeAB_Negative.Data;
-            if (aBNegativeDetails == null)
-            {
-                return View();
-            }
-            ViewBag.ABNegativeReceived = aBNegativeDetails.ReleasedUnits;
+           
+            ViewBag.ABNegativeReceived = aBNegativeDetails?.ReleasedUnits ?? 0;
 
             return View();
         }

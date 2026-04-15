@@ -103,7 +103,8 @@ namespace BloodHeroA.Application.Services.Implementations
                       $"Please review and respond promptly.\n\n" +
                       $"Regards,\nBlood Hero Admin",
                     Subject = "NEW BLOOD DONATION REQUEST",
-                    ReceiverEmail = organization.Email
+                    ReceiverEmail = organization.Email,
+                    SendererEmail = currentUser.Email
                 };
                 await _donationRequest.CreateAsync(intendedRequest);
                 await _notificationService.SendNotificationAsync(notificationDto);

@@ -11,6 +11,9 @@ namespace BloodHeroA.Application.Services.Interfaces
         CreateAsync(ReleasedBloodRequestDto releasedBlood);
 
         Task<BaseResponse<IEnumerable<ReleasedBloodResponseDto>>>
+       ReleaseBloodAsync(ReleasedBloodRequestDto releasedBlood);
+
+        Task<BaseResponse<IEnumerable<ReleasedBloodResponseDto>>>
                GetReleasedByTypeAsync(BloodGroup bloodGroup);
 
         Task<BaseResponse<ReleasedBloodResponseDto?>> GetByIdAsync(Guid id);

@@ -75,6 +75,7 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 Subject = "Welcome to Blood Hero!",
                 ReceiverEmail = organization.Email,
+                SendererEmail = "admin@bloodhero.com",
                 Message = $"Dear {organization.OrganizationName},\n\n" +
                $"Welcome to Blood Hero! Your organization has been successfully registered.\n\n" +
                $"You can now manage blood donations, request blood units, and track your inventory through our platform.\n\n" +

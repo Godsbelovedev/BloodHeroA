@@ -31,26 +31,14 @@ namespace BloodHeroA.Application.Services.Implementations
         {
             var currentUser = await _authService.GetCurrentUser();
 
-            Guid senderId;
             string adminIdInString = "dd38778b-eab3-4107-82f3-81e2c9d0f4d9";
             bool IsValidAdminId = Guid.TryParse(adminIdInString, out Guid adminId);
 
-            string senderName;
-            string senderEmail;
+            //string senderName;
+            //string senderEmail;
 
-            if (currentUser == null || currentUser.Role == Role.Admin)
-            {
-                senderName = "Admin";
-                senderEmail = "admin@bloodhero.com";
-                senderId = adminId;
-            }
-            else
-            {
-                senderName = currentUser.FullName;
-                senderEmail = currentUser.Email;
-                senderId = currentUser.Id;
-            }
-            var receiver = await _userRepository.GetUserAsync(d => d.Email == dTO.ReceiverEmail);
+            var receiver = await _userRepository
+            .GetUserAsync(d => d.Email == dTO.ReceiverEmail);
             if (receiver is null)
             {
                 return new BaseResponse<NotificationResponseDto>
@@ -65,8 +53,8 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 Message = dTO.Message,
                 ReceiverId = receiver.Id,
-                SenderId = senderId,
-                Subject = dTO.Subject
+                Subject = dTO.Subject,
+                SenderId = currentUser?.Id ?? adminId
             };
             await _emailService.SendAsync(receiver.Email, dTO.Subject, dTO.Message);
 
@@ -79,9 +67,9 @@ namespace BloodHeroA.Application.Services.Implementations
                 Id = notification.Id,
                 Message = notification.Message,
                 SentDate = notification.DateSent,
-                SenderName = senderName,
                 Subject = dTO.Subject,
-                SenderEmail = senderEmail
+                SenderEmail = currentUser?.Email ?? "admin@bloodhero.com",
+                SenderName = currentUser?.FullName ?? "Admin-BloodHero"
             };
             return BaseResponse<NotificationResponseDto>.Success(dto);
 
@@ -121,6 +109,13 @@ namespace BloodHeroA.Application.Services.Implementations
 
         public async Task<BaseResponse<NotificationResponseDto?>> GetByIdAsync(Guid id)
         {
+            var currentUser = await _authService.GetCurrentUser();
+           
+            if(currentUser == null)
+            {
+                return BaseResponse<NotificationResponseDto?>
+                .Failure("user not authenticated");
+            }
             var checkNotification = await _notificationRepository.GetByIdAsync(id);
             if (checkNotification is null)
             {
@@ -136,7 +131,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 checkNotification.IsRead = true;
                 await _unitOfWork.SaveChangesAsync();
             }
-            var sender = await _userRepository.GetUserByIdAsync(checkNotification.SenderId);
+            var sender = await _userRepository.GetUserByIdAsync(currentUser.Id);
             if (sender is null)
             {
                 return new BaseResponse<NotificationResponseDto?>
@@ -151,7 +146,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 Message = checkNotification.Message,
                 Id = checkNotification.Id,
                 Subject = checkNotification.Subject,
-                SenderName = checkNotification.Sender!.FullName,
+                SenderName =  "admin@bloodhero.com",
                 SentDate = checkNotification.DateSent,
                 SenderEmail = sender.Email,
                 IsRead = checkNotification.IsRead
@@ -165,7 +160,8 @@ namespace BloodHeroA.Application.Services.Implementations
             };
         }
 
-        public async Task<BaseResponse<IEnumerable<NotificationResponseDto>>> GetNotificationsByUserIdAsync()
+        public async Task<BaseResponse<IEnumerable<NotificationResponseDto>>> 
+        GetNotificationsByUserIdAsync()
         {
             var currentUser = await _authService.GetCurrentUser();
             if(currentUser is null)
@@ -178,7 +174,8 @@ namespace BloodHeroA.Application.Services.Implementations
                 };
             }
 
-            var allNotifications = await _notificationRepository.GetNotificationsByUserIdAsync(currentUser.Id);
+            var allNotifications = await _notificationRepository
+                .GetNotificationsByUserIdAsync(currentUser.Id);
             if (!allNotifications.Any())
             {
                 return new BaseResponse<IEnumerable<NotificationResponseDto>>
@@ -188,19 +185,19 @@ namespace BloodHeroA.Application.Services.Implementations
                     Status = false
                 };
             }
+            var sender = await _userRepository.GetUserByIdAsync(currentUser.Id);
             var listOfMessages = new List<NotificationResponseDto>();
             foreach (var notification in allNotifications)
             {
-                var sender = await _userRepository.GetUserByIdAsync(notification.SenderId);
                
                 listOfMessages.Add(new NotificationResponseDto
                 {
                     Message = notification.Message,
                     Id = notification.Id,
                     Subject = notification.Subject,
-                    SenderName = notification.Sender!.FullName,
+                    SenderName = notification.Sender?.FullName ?? "Admin-BloodHero",
                     SentDate = notification.DateSent,
-                    SenderEmail = sender!.Email,
+                    SenderEmail = "admin@bloodhero.com",
                     IsRead = notification.IsRead,
                     Role = currentUser.Role
                 });

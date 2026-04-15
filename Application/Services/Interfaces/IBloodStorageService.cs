@@ -10,6 +10,8 @@ namespace BloodHeroA.Application.Services.Interfaces
        
         Task<BaseResponse<IEnumerable<BloodStorageResponseDto>>>
                 GetForSupplyAsync(BloodGroup bloodGroup);
+        Task<BaseResponse<IEnumerable<BloodStorageResponseDto>>>
+        GetStoragesForMultiSupplyAsync(BloodGroup bloodGroup);
         Task<BaseResponse<BloodStorageResponseDto?>> GetByIdAsync(Guid id);
         Task<BaseResponse<bool?>> DeleteAsync(Guid id);
         Task<BaseResponse<IEnumerable<BloodStorageResponseDto>>> GetExpiredAsync();

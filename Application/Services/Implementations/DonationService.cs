@@ -52,7 +52,7 @@ namespace BloodHeroA.Application.Services.Implementations
             {
                 return BaseResponse<DonationResponseDto>.Failure("donor not found");
             }
-            if (!donor.IsAvailable || (DateTime.UtcNow - donor.LastDonationDate).TotalDays < 60)
+            if (donor.NextDueDonationDate > DateTime.UtcNow)
             {
                 return BaseResponse<DonationResponseDto>.Failure("not due for next donation");
             }
@@ -73,14 +73,14 @@ namespace BloodHeroA.Application.Services.Implementations
                 IsSuccessful = donationDto.IsSuccessful
             };
             bankingOrganization.TotalDonations += 1;
-            donor.LastDonationDate = donation.CreatedAt;
+            donor.LastDonationDate = DateTime.UtcNow;
             donor.TotalDonations += donation.UnitsDonated;
             
             if(donor.DonorOrganization is not null)
             {
                donor.DonorOrganization.TotalDonations += donation.UnitsDonated;
             }
-            donor.NextDueDonationDate = donation.CreatedAt.AddDays(60);
+            donor.NextDueDonationDate = donation.CreatedAt.AddMinutes(6);
             await _donationRepository.CreateAsync(donation);
             await _unitOfWork.SaveChangesAsync();
 
@@ -95,7 +95,8 @@ namespace BloodHeroA.Application.Services.Implementations
                           $"\r\n\r\n We are grateful for your support and look" +
                           $" forward to seeing you again in future donation drives." +
                           $"\r\n\r\nBloodHero Team",
-                ReceiverEmail = donor.Email
+                ReceiverEmail = donor.Email,
+                SendererEmail = currentUser.Email
             };
             await _notificationService.SendNotificationAsync(notification);
 
@@ -111,7 +112,9 @@ namespace BloodHeroA.Application.Services.Implementations
                    BloodGroup = donor.BloodGroup,
                    UnitsDonated = donation.UnitsDonated,
                    DonationDate = donation.CreatedAt
-                }
+                },
+                Message = "create successful",
+                Status = true
             };
         }
 

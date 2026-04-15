@@ -54,9 +54,11 @@ namespace BloodHeroA.Controllers
                 return View(donationDto);
             }
             ViewBag.Success = createDonoation.Message;
-            if (donationDto.DonorOrganizationId.HasValue)
+            var donorOrganizationId = donationDto.DonorOrganizationId;
+            if (donorOrganizationId.HasValue 
+                && donorOrganizationId.Value != Guid.Empty)
             {
-                return RedirectToAction("GetAvailableDonorsByDonorOrganizationId", "Donors", new { donorOrganizationId = donationDto.DonorOrganizationId.Value});
+                return RedirectToAction("GetAvailableDonorsByDonorOrganizationId", "Donors", new { donorOrganizationId = donationDto.DonorOrganizationId.Value });
             }
             ViewBag.Source = "GetAvailableDonorsByDonorOrganizationId";
             ViewBag.DonorOrganizationId = donationDto.DonorOrganizationId;

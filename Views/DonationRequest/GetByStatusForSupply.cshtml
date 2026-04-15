@@ -96,14 +96,24 @@
                             
                                 @if(request.Status != Status.Completed)
                                 {
-                                        <a   asp-controller="BloodStorages"
+                                        @* <a   asp-controller="BloodStorages"
                                              asp-action="GetStorageForSupply"
                                            asp-route-requestId="@request.Id"
                                              asp-route-bloodGroup="@request.BloodType"
                                              id="details"
                                         style="margin-top:12px;">Attend To Request
                                              
-                                        </a>
+                                        </a> *@
+
+                                    <a asp-controller="BloodStorages"
+                                       asp-action="GetStoragesForMultiSupply"
+                                       asp-route-requestId="@request.Id"
+                                       asp-route-bloodGroup="@request.BloodType"
+                                       id="details"
+                                       style="margin-top:12px;">
+                                        
+                                       Multi-Supply
+                                    </a>
                                 }
                             </td>
                         </tr>

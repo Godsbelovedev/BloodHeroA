@@ -144,15 +144,10 @@
 
                 <input type="hidden" asp-for="DonationRequestId" />
                 <input type="hidden" asp-for="BloodStorageId" />
-
-                <div class="form-group">
-                    <label>Blood Group</label>
-                    <input asp-for="BloodTypeReleased" readonly />
-                </div>
               
                 <div class="form-group">
                     <label>Quantity Released</label>
-                    <input asp-for="QuantityReleased" readonly />
+                    <input asp-for="UnitToRelease" readonly />
                 </div>
 
                 @* <div class="form-group">
@@ -165,12 +160,12 @@
                     Release
                 </button>
             </form>
-            <a asp-controller="BloodStorages"
-               asp-route-bloodGroup="@Model.BloodTypeReleased"
+            @* <a asp-controller="BloodStorages"
+               asp-route-bloodGroup="@Model."
                asp-route-requestId="@Model.DonationRequestId"
                 asp-action="GetStorageForSupply" class="btn-back">
                 ← Back to List
-            </a>
+            </a> *@
         </div>
     </div>
 </div>

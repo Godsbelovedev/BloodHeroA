@@ -123,6 +123,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 $" {bankingOrganization.User!.Email}\r\n\r\n" +
                 $"Regards,\n{bankingOrganization.OrganizationName}",
                         ReceiverEmail = donationToTest.Donor!.Email,
+                        SendererEmail = currentUser.Email,
                         Subject = "BLOOD TEST RESULT NOTIFICATION"
             };
             await _notificationService.SendNotificationAsync(notificationDto);

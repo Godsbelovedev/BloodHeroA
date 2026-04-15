@@ -36,9 +36,8 @@ namespace BloodHeroA.Controllers
             var model = new ReleasedBloodRequestDto
             {
                 BloodStorageId = details.Id,
-                BloodTypeReleased = details.BloodGroup,
                 DonationRequestId = requestId,
-                QuantityReleased = 1
+                UnitToRelease = 1
             };
             return View(model);
         }
@@ -60,9 +59,28 @@ namespace BloodHeroA.Controllers
                 return View(releasedBlood);
             }
             TempData["success"] = createRelease.Message;
-            return RedirectToAction("GetStorageForSupply", "BloodStorages",
-                                    new {bloodGroup = releasedBlood.BloodTypeReleased,
-                                         requestId = releasedBlood.DonationRequestId});
+            return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
+            //return RedirectToAction("GetStorageForSupply", "BloodStorages",
+            //                        new {bloodGroup = releasedBlood.BloodTypeReleased,
+            //                             requestId = releasedBlood.DonationRequestId});
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MultiSupplyBlood(ReleasedBloodRequestDto releasedBlood)
+        {
+
+            var createRelease = await _releasedBlood.ReleaseBloodAsync(releasedBlood);
+
+            if (!createRelease.Status || createRelease.Data == null)
+            {
+                ViewBag.Error = createRelease.Message;
+                return View(releasedBlood);
+            }
+            TempData["success"] = createRelease.Message;
+            return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
+            //return RedirectToAction("GetStorageForSupply", "BloodStorages",
+            //                        new {bloodGroup = releasedBlood.BloodTypeReleased,
+            //                             requestId = releasedBlood.DonationRequestId});
         }
     }
 }

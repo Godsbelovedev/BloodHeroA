@@ -17,5 +17,7 @@ namespace BloodHeroA.Repositories.IRepositories
 
         Task<IEnumerable<BloodStorage>> GetAvailableBloodsAsync
                             (Expression<Func<BloodStorage, bool>> exp);
+        public IQueryable<BloodStorage> GetAvailableBloods
+                                   (Expression<Func<BloodStorage, bool>> exp);
     }
 }

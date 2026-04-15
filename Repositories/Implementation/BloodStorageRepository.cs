@@ -31,6 +31,15 @@ namespace BloodHeroA.Repositories.Implementation
                                                 .ToListAsync();
         }
 
+        public IQueryable<BloodStorage> GetAvailableBloods
+                                   (Expression<Func<BloodStorage, bool>> exp)
+        {
+            return _context.BloodStorages.Include(r => r.BankingOrganization)
+                                                .Include(r => r.Donation)
+                                                .ThenInclude(r => r.Donor)
+                                                .ThenInclude(r => r.User)
+                                                .Where(exp).OrderBy(r => r.ExpiryDate);
+        }
         public async Task<BloodStorage?> FindAsync(Expression<Func<BloodStorage, bool>> exp)
         {
             return await _context.BloodStorages.Include(r => r.BankingOrganization)
