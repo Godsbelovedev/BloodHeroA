@@ -9,7 +9,7 @@ namespace BloodHeroA.Models.Entities
         public int StoredUnits { get; set; }
         public int ReleasedUnits { get; set; } = 0;
         public int ExpiredUnits { get; set; } = 0;
-        public int UnitsAvailable => StoredUnits - ReleasedUnits - ExpiredUnits;
+        public int UnitsAvailable => Math.Max(0, StoredUnits - ReleasedUnits - ExpiredUnits);
         public Guid? RecipientOrganizationId {get; set;}
         public Guid BankingOrganizationId { get; set; }
         public bool IsDeleted { get; set; } = false;

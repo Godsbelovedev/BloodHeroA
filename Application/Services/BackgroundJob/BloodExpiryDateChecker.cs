@@ -19,7 +19,7 @@ namespace BloodHeroA.Application.Services.BackgroundJob
                 using var scope = _scopeService.CreateScope();
                 var bloodService = scope.ServiceProvider.GetRequiredService<IBloodStorageService>();
                 await bloodService.UpdateExpiredBloodCountAsync();
-                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
             }
         }
     }

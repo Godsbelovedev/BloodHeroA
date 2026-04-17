@@ -1,6 +1,5 @@
 ﻿@model BloodHeroA.DTOs.NotificationResponseDto
 @{
-    ViewData["Title"] = "Notification Details";
     Layout = null;
 }
 
@@ -114,10 +113,10 @@
             <div>@Model.SentDate.ToString("MMMM dd, yyyy hh:mm tt")</div>
         </div>
 
-        <div class="mb-3">
+        @* <div class="mb-3">
             <span class="detail-label">Sender Email:</span>
             <div>@Model.SenderEmail</div>
-        </div>
+        </div> *@
 
         <div class="mb-3">
             <span class="detail-label">Message:</span>

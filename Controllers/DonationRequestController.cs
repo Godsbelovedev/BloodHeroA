@@ -53,7 +53,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = requestToSend.Message;
                 return View(donationRequest);
             }
-            TempData["success"] = requestToSend.Message;
+            //TempData["success"] = requestToSend.Message;
             return RedirectToAction(route.action, route.controller);
         }
 
@@ -84,7 +84,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = requestToSend.Message;
                 return View(donationRequest);
             }
-            TempData["success"] = requestToSend.Message;
+            //TempData["success"] = requestToSend.Message;
             return RedirectToAction(route.action, route.controller);
         }
         [HttpGet]

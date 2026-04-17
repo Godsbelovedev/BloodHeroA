@@ -91,7 +91,7 @@ namespace BloodHeroA.Controllers
                 return RedirectToAction("Login", "Users");
 
             }
-            TempData["success"] = update.Message;
+            //TempData["success"] = update.Message;
             return RedirectToAction(route.action, route.controller);
         }
         //[HttpGet]
@@ -116,7 +116,7 @@ namespace BloodHeroA.Controllers
             {
                 return NotFound();
             }
-            TempData["success"] = "Successful";
+            //TempData["success"] = "Successful";
             return View(user);
         }
     }

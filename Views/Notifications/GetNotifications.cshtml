@@ -133,7 +133,42 @@
 
     <h2 class="page-title">Your Notifications</h2>
 
-   
+    @if (User.IsInRole(Role.RecipientOrganization.ToString()))
+    {
+        <a asp-controller="RecipientOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+ 
+    else if (User.IsInRole(Role.BankingOrganization.ToString()))
+    {
+        <a asp-controller="BankingOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.DonorOrganization.ToString()))
+    {
+        <a asp-controller="DonorDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.Admin.ToString()))
+    {
+        <a asp-controller="AdminDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if (User.IsInRole(Role.Donor.ToString()))
+    {
+        <a asp-controller="DonorDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
     
     @if (ViewBag.Error != null)
     {
@@ -175,38 +210,40 @@
             
         }
     }
-    @if (User.IsInRole(Role.Admin.ToString()))
-    {
-        <a asp-controller="AdminDashboard"
-           asp-action="Dashboard" id="back-button">
-         Back To Dashboard</a>
-    }
-    else if (User.IsInRole(Role.BankingOrganization.ToString()))
-    {
-        <a asp-controller="BankingOrganizationDashboard"
-           asp-action="Dashboard" id="back-button">
-            Back To Dashboard
-        </a>
-    }
-    else if (User.IsInRole(Role.DonorOrganization.ToString()))
-    {
-        <a asp-controller="DonorDashboard"
-           asp-action="Dashboard" id="back-button">
-            Back To Dashboard
-        </a>
-    }
-    else if (User.IsInRole(Role.RecipientOrganization.ToString()))
+    @if (User.IsInRole(Role.RecipientOrganization.ToString()))
     {
         <a asp-controller="RecipientOrganizationDashboard"
            asp-action="Dashboard" id="back-button">
             Back To Dashboard
         </a>
     }
-    else if (User.IsInRole(Role.Donor.ToString()))
+    else if(User.IsInRole(Role.BankingOrganization.ToString()))
+    {
+        <a asp-controller="BankingOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if(User.IsInRole(Role.DonorOrganization.ToString()))
+    {
+        <a asp-controller="DonorOrganizationDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+    else if(User.IsInRole(Role.Donor.ToString()))
     {
         <a asp-controller="DonorDashboard"
            asp-action="Dashboard" id="back-button">
             Back To Dashboard
         </a>
     }
+    else if(User.IsInRole(Role.Admin.ToString()))
+    {
+        <a asp-controller="AdminDashboard"
+           asp-action="Dashboard" id="back-button">
+            Back To Dashboard
+        </a>
+    }
+
 </div>

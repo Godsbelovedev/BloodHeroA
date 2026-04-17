@@ -301,7 +301,8 @@ namespace BloodHeroA.Application.Services.Implementations
                 <BloodStorageResponseDto>>.Failure("user not authenticated");
             }
             var expiredBloods = await _bloodStorageRepository
-            .GetExpiredAsync(r => r.CreatedAt < DateTime.UtcNow.AddDays(-60) && !r.IsDeleted && !r.IsReleased);
+            .GetExpiredAsync(r => r.CreatedAt < DateTime.UtcNow.AddMinutes(-10) 
+             && !r.IsDeleted && !r.IsReleased);
 
             var organization = await _bankingOrganization
                        .GetByUserIdAsync(currentUser.Id);
@@ -314,7 +315,7 @@ namespace BloodHeroA.Application.Services.Implementations
             if (currentUser.Role == Role.BankingOrganization)
             {
                 expiredBloods = await _bloodStorageRepository
-               .GetAvailableBloodsAsync(r => r.CreatedAt < DateTime.UtcNow.AddDays(-60) && !r.IsDeleted
+               .GetAvailableBloodsAsync(r => r.CreatedAt < DateTime.UtcNow.AddMinutes(-10) && !r.IsDeleted
                 && !r.IsReleased && r.BankingOrganizationId == organization.Id);
             }
             if (!expiredBloods.Any())
@@ -347,7 +348,7 @@ namespace BloodHeroA.Application.Services.Implementations
         {
             var expiredStorages = await _bloodStorageRepository.
             GetExpiredAsync(r => !r.IsDeleted && !r.ExpiryProcess
-            && r.CreatedAt < DateTime.UtcNow.AddDays(-60));
+           && !r.IsReleased && r.CreatedAt < DateTime.UtcNow.AddMinutes(-10));
 
             var inventories = await _bloodInventoryRepository
                 .FindInventoriesAsync(r => !r.IsDeleted);
@@ -362,6 +363,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 {
                     inventory.ExpiredUnits += 1;
                 }
+                item.IsExpired = true;
                 item.ExpiryProcess = true;
             }
             await _unitOfWork.SaveChangesAsync();

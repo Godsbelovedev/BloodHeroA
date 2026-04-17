@@ -630,8 +630,9 @@ namespace BloodHeroA.Application.Services.Implementations
             }
             var inventory = await _bloodInventoryRepository.FindAsync
                (r => r.BloodGroup == BloodGroup.O_Negative);
-            if (inventory == null)
+            if (inventory == null )
             {
+                
                 return BaseResponse<BloodInventoryResponseDTO>.Failure("no inventory found");
             }
             return new BaseResponse<BloodInventoryResponseDTO>

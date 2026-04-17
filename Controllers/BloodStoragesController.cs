@@ -62,7 +62,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = createStorage.Message;
                 return View(bloodStorageDto);
             }
-            TempData["success"] = createStorage.Message;
+            //TempData["success"] = createStorage.Message;
             return RedirectToAction("GetDonationsForStorage", "Donations");
         }
 
@@ -112,6 +112,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = expiredStorages.Message;
                 return View(new List<BloodStorageResponseDto>());
             }
+            ViewBag.Back = "Back";
             return View(expiredStorages.Data);
         }
         [HttpPost]

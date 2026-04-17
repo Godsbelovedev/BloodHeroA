@@ -59,7 +59,7 @@ namespace BloodHeroA.Controllers
                 TempData["failure"] = "User not authenticated";
                 return RedirectToAction("Login", "Users");
             }
-            TempData["success"] = notification.Message;
+            //TempData["success"] = notification.Message;
             return RedirectToAction(route.action, route.controller);
         }
 
@@ -142,7 +142,7 @@ namespace BloodHeroA.Controllers
                 TempData["failure"] = "User not authenticated";
                 return RedirectToAction("Login", "Users");
             }
-            TempData["success"] = notification.Message;
+            //TempData["success"] = notification.Message;
             return RedirectToAction(route.action, route.controller);
         }
        

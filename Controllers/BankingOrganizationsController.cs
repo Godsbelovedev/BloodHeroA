@@ -20,7 +20,7 @@ namespace BloodHeroA.Controllers
         private readonly IAuthService _currentUser;
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> ViewAll()
         {
             var organizations = await _organization.GetAllAsync();
@@ -29,7 +29,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = organizations.Message;
                 return View(new List<BankingOrganizationResponseDto>());
             }
-            ViewBag.Success = organizations.Message;
+           // ViewBag.Success = organizations.Message;
             return View(organizations.Data);
         }
         [HttpGet]
@@ -40,7 +40,7 @@ namespace BloodHeroA.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Success = organization.Message;
+           // ViewBag.Success = organization.Message;
             return View(organization.Data);
         }
 
@@ -58,7 +58,7 @@ namespace BloodHeroA.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Error = response.Message;
+           // ViewBag.Error = response.Message;
             return View(response.Data);
         }
 
@@ -105,7 +105,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = update.Message;
                 return View(updateDto);
             }
-            TempData["success"] = update.Message;
+            //TempData["success"] = update.Message;
             return RedirectToAction("Viewprofile");
         }
 
@@ -130,7 +130,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = createOrganization.Message;
                 return View(bankingOrganizationDTO);
             }
-            TempData["success"] = createOrganization.Message;
+            //TempData["success"] = createOrganization.Message;
             return RedirectToAction("Login", "Users");
         }
         [HttpPost]

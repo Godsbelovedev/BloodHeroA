@@ -61,7 +61,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = createTest.Message;
                 return View(bloodTestResultDto);
             }
-            TempData["success"] = createTest.Message;
+            //TempData["success"] = createTest.Message;
             return RedirectToAction("GetAllUntestedDonations", "Donations");
         }
         [HttpGet]
@@ -111,7 +111,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = update.Message;
                 return View(updateDto);
             }
-            TempData["success"] = update.Message;
+            //TempData["success"] = update.Message;
             return RedirectToAction("GetDonationsForStorage", "Donations");
         }
         [HttpGet]

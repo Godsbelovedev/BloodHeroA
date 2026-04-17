@@ -127,7 +127,7 @@ namespace BloodHeroA.Controllers
                 return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
             }
 
-            TempData["success"] = donationToDelete.Message;
+            //TempData["success"] = donationToDelete.Message;
 
             if(isTested)
             {

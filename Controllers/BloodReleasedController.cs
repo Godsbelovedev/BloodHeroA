@@ -41,29 +41,29 @@ namespace BloodHeroA.Controllers
             };
             return View(model);
         }
+        //**CONDEMNED
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(ReleasedBloodRequestDto releasedBlood)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(releasedBlood);
+        //    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ReleasedBloodRequestDto releasedBlood)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(releasedBlood);
-            }
+        //    var createRelease = await _releasedBlood.CreateAsync(releasedBlood);
 
-            var createRelease = await _releasedBlood.CreateAsync(releasedBlood);
-
-            if (!createRelease.Status || createRelease.Data == null)
-            {
-                ViewBag.Error = createRelease.Message;
-                return View(releasedBlood);
-            }
-            TempData["success"] = createRelease.Message;
-            return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
+        //    if (!createRelease.Status || createRelease.Data == null)
+        //    {
+        //        ViewBag.Error = createRelease.Message;
+        //        return View(releasedBlood);
+        //    }
+            //TempData["success"] = createRelease.Message;
+           // return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
             //return RedirectToAction("GetStorageForSupply", "BloodStorages",
             //                        new {bloodGroup = releasedBlood.BloodTypeReleased,
             //                             requestId = releasedBlood.DonationRequestId});
-        }
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MultiSupplyBlood(ReleasedBloodRequestDto releasedBlood)
@@ -76,11 +76,8 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = createRelease.Message;
                 return View(releasedBlood);
             }
-            TempData["success"] = createRelease.Message;
+            //TempData["success"] = createRelease.Message;
             return RedirectToAction("Dashboard", "BankingOrganizationDashboard");
-            //return RedirectToAction("GetStorageForSupply", "BloodStorages",
-            //                        new {bloodGroup = releasedBlood.BloodTypeReleased,
-            //                             requestId = releasedBlood.DonationRequestId});
         }
     }
 }

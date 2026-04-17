@@ -124,7 +124,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 return BaseResponse<IEnumerable<ReleasedBloodResponseDto>>
                                 .Failure("inventories not found");
             }
-
+            int count = 0;
             var response = new List<ReleasedBloodResponseDto>();
             foreach (var storage in storageForRelease)
             {
@@ -146,7 +146,7 @@ namespace BloodHeroA.Application.Services.Implementations
                     RecipientOrganizationId = recipientOrganization.Id,
                     BloodStorageId = storage.Id
                 };
-               
+                count++;
                 await _releasedBlood.CreateAsync(release);
                 response.Add(new ReleasedBloodResponseDto
                 {
@@ -187,7 +187,7 @@ namespace BloodHeroA.Application.Services.Implementations
                 ReceiverEmail = recipientOrganization.Email,
                 SendererEmail = "admin@bloodhero.com",
                 Message = $"Dear {recipientOrganization.OrganizationName},\r\n\r\n" +
-                $"Your organization has received {releasedBlood.UnitToRelease} unit(s) " +
+                $"Your organization has received {count} unit(s) " +
                 $"fitting the request {checkRequest.BloodTypeNeeded}.\r\n" +
                 //$"Reason: {release.ReasonForRelease}\r\n\r\n" +
                 $"Regards,\nBlood Hero Admin"

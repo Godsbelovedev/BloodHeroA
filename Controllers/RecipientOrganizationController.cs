@@ -100,7 +100,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = update.Message;
                 return View(updateDto);
             }
-            TempData["success"] = update.Message;
+            //TempData["success"] = update.Message;
             return RedirectToAction("Viewprofile");
         }
 
@@ -125,7 +125,7 @@ namespace BloodHeroA.Controllers
                 ViewBag.Error = createOrganization.Message;
                 return View(donorOrganizationDTO);
             }
-            TempData["success"] = createOrganization.Message;
+            //TempData["success"] = createOrganization.Message;
             return RedirectToAction("Login", "Users");
         }
         [HttpPost]
